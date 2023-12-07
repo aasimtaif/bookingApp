@@ -41,6 +41,8 @@ export const getHotel = async (req, res, next) => {
 };
 export const getHotels = async (req, res, next) => {
   const { min, max, ...others } = req.query;
+  console.log(min, max, others)
+
   try {
     const hotels = await Hotel.find({
       ...others,
@@ -53,6 +55,7 @@ export const getHotels = async (req, res, next) => {
 };
 export const countByCity = async (req, res, next) => {
   const cities = req.query.cities.split(",");
+  // console.log(cities)
   try {
     const list = await Promise.all(
       cities.map((city) => {
