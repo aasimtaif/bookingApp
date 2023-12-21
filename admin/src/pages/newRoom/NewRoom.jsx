@@ -20,7 +20,7 @@ const NewRoom = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    const roomNumbers = rooms.split(",").map((room) => ({ number: room }));
+    const roomNumbers = rooms?.split(",").map((room) => ({ number: room }));
     try {
       await axios.post(`/rooms/${hotelId}`, { ...info, roomNumbers });
     } catch (err) {
@@ -28,7 +28,7 @@ const NewRoom = () => {
     }
   };
 
-  console.log(info)
+  console.log(info,rooms)
   return (
     <div className="new">
       <Sidebar />
@@ -68,7 +68,7 @@ const NewRoom = () => {
                     ? "loading"
                     : data &&
                       data.map((hotel) => (
-                        <option key={hotel._id} value={hotel._id}>{hotel.name}</option>
+                        <option key={hotel._id} value={hotel._id}>{hotel.name}--{hotel.city}</option>
                       ))}
                 </select>
               </div>

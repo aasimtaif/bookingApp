@@ -15,9 +15,7 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="wrapper">
-        <div className="search">
-          <input type="text" placeholder="Search..." />
-          <SearchOutlinedIcon />
+        <div className="search">  
         </div>
         <div className="items">
           <div className="item">
@@ -30,6 +28,10 @@ const Navbar = () => {
               onClick={() => dispatch({ type: "TOGGLE" })}
             />
           </div>
+          <div className="item">
+            <FullscreenExitOutlinedIcon className="icon" />
+          </div>
+
           <div className="item">
             <ListOutlinedIcon className="icon" />
           </div>

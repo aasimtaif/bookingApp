@@ -22,7 +22,7 @@ const Datatable = ({ columns }) => {
       setList(list.filter((item) => item._id !== id));
     } catch (err) { }
   };
-
+  console.log(columns,path)
   const actionColumn = [
     {
       field: "action",
@@ -31,9 +31,9 @@ const Datatable = ({ columns }) => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to="/users/test" style={{ textDecoration: "none" }}>
+            {/* <Link to="/users/test" style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
-            </Link>
+            </Link> */}
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row._id)}
@@ -53,16 +53,15 @@ const Datatable = ({ columns }) => {
           Add New
         </Link>
       </div>
-      {list &&
-        <DataGrid
-          className="datagrid"
-          rows={list}
-          columns={columns.concat(actionColumn)}
-          pageSize={9}
-          rowsPerPageOptions={[9]}
-          checkboxSelection
-          getRowId={(row) => row._id}
-        />}
+      {list && <DataGrid
+        className="datagrid"
+        rows={list}
+        columns={columns.concat(actionColumn)}
+        pageSize={9}
+        rowsPerPageOptions={[9]}
+        checkboxSelection
+        getRowId={(row) => row._id}
+      />}
     </div>
   );
 };
