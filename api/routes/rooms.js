@@ -20,7 +20,7 @@ router.put("/:id", verifyAdmin, updateRoom);
 router.delete("/:id/:hotelid", verifyAdmin, deleteRoom);
 //GET
 
-router.get("/:id", getRoom);
+router.get("/find/:id", getRoom);
 //GET ALL
 
 router.get("/", getRooms);

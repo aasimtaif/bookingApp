@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import "./login.css";
+import { DNA } from 'react-loader-spinner'
+import "./Register.css";
 
-const Login = () => {
+const Register = () => {
     const [credentials, setCredentials] = useState({
         username: undefined,
         password: undefined,
@@ -22,39 +23,69 @@ const Login = () => {
         e.preventDefault();
         dispatch({ type: "LOGIN_START" });
         try {
-            const res = await axios.post("http://localhost:8800/api/auth/login", credentials);
+            const res = await axios.post("http://localhost:8800/api/auth/register", credentials);
             dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
-            navigate("/")
+            navigate(-1)
         } catch (err) {
             dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });
         }
     };
+    console.log(credentials)
 
 
     return (
         <div className="login">
-            <div className="lContainer">
-                <input
-                    type="text"
-                    placeholder="username"
-                    id="username"
-                    onChange={handleChange}
-                    className="lInput"
-                />
-                <input
-                    type="password"
-                    placeholder="password"
-                    id="password"
-                    onChange={handleChange}
-                    className="lInput"
-                />
-                <button disabled={loading} onClick={handleClick} className="lButton">
-                    Login
-                </button>
-                {error && <span>{error.message}</span>}
-            </div>
+            {loading ?
+                <DNA
+                    visible={true}
+                    height="300"
+                    width="300"
+                    ariaLabel="dna-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="dna-wrapper"
+                /> :
+                <div className="lContainer">
+                    <input
+                        type="text"
+                        placeholder="username"
+                        id="username"
+                        onChange={handleChange}
+                        className="lInput"
+                    />
+                    <input
+                        type="email"
+                        placeholder="email"
+                        id="email"
+                        onChange={handleChange}
+                        className="lInput"
+                    />
+                    <input
+                        type="number"
+                        placeholder="Phone number"
+                        id="phone"
+                        onChange={handleChange}
+                        className="lInput"
+                    /><input
+                        type="password"
+                        placeholder="password"
+                        id="password"
+                        onChange={handleChange}
+                        className="lInput"
+                    />
+                    <button disabled={loading} onClick={handleClick} className="lButton">
+                        Register
+                    </button>
+                    <span className="register-button">
+                        Already have an account?
+                        <Link to='/register' style={{ textDecoration: "none" }}>
+                            <b>Login now.</b>
+                        </Link>
+                    </span>
+                    {error && <span>{error.message}</span>}
+                </div>
+            }
         </div>
     );
 };
 
-export default Login;
+export default Register;

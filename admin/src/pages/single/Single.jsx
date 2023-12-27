@@ -1,8 +1,12 @@
 import "./single.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
-
+import useFetch from "../../hooks/useFetch";
 const Single = () => {
+  const pathname = (window.location.pathname).split("/")
+  const { data, loading, error } = useFetch(`http://localhost:8800/api/${pathname[1]}/find/${pathname[2]}`);
+
+
   return (
     <div className="single">
       <Sidebar />

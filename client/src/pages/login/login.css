@@ -11,7 +11,7 @@
   gap: 10px;
 }
 
-.lInput{
+.lInput {
   height: 30px;
   padding: 10px;
 }
@@ -26,7 +26,15 @@
   border-radius: 5px;
 }
 
-.lButton:disabled{
+.lButton:disabled {
   background-color: #0071c28c;
   cursor: not-allowed;
+}
+.register-button {
+  font-size: small;
+  padding: 2px;
+}
+b {
+  hover: pointer;
+  margin-left: 10px;
 }

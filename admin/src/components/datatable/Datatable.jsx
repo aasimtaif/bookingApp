@@ -1,6 +1,5 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns, userRows } from "../../datatablesource";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
@@ -15,14 +14,15 @@ const Datatable = ({ columns }) => {
   useEffect(() => {
     setList(data);
   }, [data]);
-
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/${path}/${id}`);
       setList(list.filter((item) => item._id !== id));
-    } catch (err) { }
+    } catch (err) {
+      console.log(err)
+    }
   };
-  console.log(columns,path)
+  console.log(columns, path)
   const actionColumn = [
     {
       field: "action",
@@ -31,9 +31,9 @@ const Datatable = ({ columns }) => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            {/* <Link to="/users/test" style={{ textDecoration: "none" }}>
+            <Link to={`/${path}/${params.row._id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
-            </Link> */}
+            </Link>
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row._id)}

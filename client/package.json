@@ -15,6 +15,7 @@
     "react": "^18.0.0",
     "react-date-range": "^1.4.0",
     "react-dom": "^18.0.0",
+    "react-loader-spinner": "^6.1.6",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
@@ -42,5 +43,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },"proxy": "http://localhost:8800"
+  },
+  "proxy": "http://localhost:8800"
 }

@@ -12,7 +12,7 @@ import { AuthContext } from "./context/AuthContext";
 import { hotelColumns, roomColumns, userColumns } from "./datatablesource";
 import NewHotel from "./pages/newHotel/NewHotel";
 import NewRoom from "./pages/newRoom/NewRoom";
-
+import Hotel from "./pages/hotel/Hotel";
 function App() {
   const { darkMode } = useContext(DarkModeContext);
 
@@ -79,7 +79,7 @@ function App() {
                 path=":productId"
                 element={
                   <ProtectedRoute>
-                    <Single />
+                    <Hotel />
                   </ProtectedRoute>
                 }
               />
@@ -87,7 +87,7 @@ function App() {
                 path="new"
                 element={
                   <ProtectedRoute>
-                    <NewHotel  />
+                    <NewHotel />
                   </ProtectedRoute>
                 }
               />
@@ -113,7 +113,7 @@ function App() {
                 path="new"
                 element={
                   <ProtectedRoute>
-                    <NewRoom  />
+                    <NewRoom />
                   </ProtectedRoute>
                 }
               />
