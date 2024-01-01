@@ -1,19 +1,19 @@
 import React from 'react'
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
-import useFetch from "../../hooks/useFetch";
+import {useFetch }from "../../hooks/useFetch";
 import Box from '@mui/material/Box';
-
+import Room from '../../components/room/Room';
 import Grid from '@mui/material/Grid';
-
+import { useParams } from 'react-router-dom';
 import "./hotel.scss";
 
 
 
 
 function Hotel() {
-    const pathname = (window.location.pathname).split("/")
-    const { data, loading, error } = useFetch(`http://localhost:8800/api/hotels/find/${pathname[2]}`);
+    const { productId } = useParams()
+    const { data, loading, error } = useFetch(`hotels/find/${productId}`);
     if (loading) {
         return <div>Loading...</div>
     }
@@ -47,8 +47,9 @@ function Hotel() {
                         <p>{data.address}</p>
                         <p>{data.distance}</p>
                         <p>Price -{data.cheapestPrice} $</p>
-
-
+                    </div>
+                    <div className="room">
+                        <Room hotelId={productId} />
                     </div>
                 </div>
             </div>

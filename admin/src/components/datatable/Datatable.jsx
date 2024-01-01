@@ -2,22 +2,20 @@ import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import useFetch from "../../hooks/useFetch";
-import axios from "axios";
+import { useFetch } from "../../hooks/useFetch";
+import { useApiCalls } from "../../hooks/useApiCalls";
 
 const Datatable = ({ columns }) => {
   const location = useLocation();
   const path = location.pathname.split("/")[1];
-  const [list, setList] = useState();
-  const { data, loading, error } = useFetch(`/${path}`);
 
-  useEffect(() => {
-    setList(data);
-  }, [data]);
-  const handleDelete = async (id) => {
+  const { data, loading, error, reFetch } = useFetch(`/${path}`);
+  const { deleteData } = useApiCalls()
+
+  const handleDelete = (id) => {
     try {
-      await axios.delete(`/${path}/${id}`);
-      setList(list.filter((item) => item._id !== id));
+      deleteData(`/${path}/${id}`);
+      reFetch(`/${path}`)
     } catch (err) {
       console.log(err)
     }
@@ -53,9 +51,9 @@ const Datatable = ({ columns }) => {
           Add New
         </Link>
       </div>
-      {list && <DataGrid
+      {!loading && <DataGrid
         className="datagrid"
-        rows={list}
+        rows={data}
         columns={columns.concat(actionColumn)}
         pageSize={9}
         rowsPerPageOptions={[9]}

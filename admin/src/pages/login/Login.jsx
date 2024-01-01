@@ -1,8 +1,8 @@
-import axios from "axios";
+
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-// import { AuthContext } from "../../context/AuthContext";
+import { useApiCalls } from "../../hooks/useApiCalls";
 import "./login.scss";
 
 const Login = () => {
@@ -10,6 +10,7 @@ const Login = () => {
     username: undefined,
     password: undefined,
   });
+  const { postData, err } = useApiCalls()
 
   const { loading, error, dispatch } = useContext(AuthContext);
 
@@ -19,11 +20,12 @@ const Login = () => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
-  const handleClick = async (e) => {
+  const handleClick =  (e) => {
     e.preventDefault();
     dispatch({ type: "LOGIN_START" });
     try {
-      const res = await axios.post("/auth/login", credentials);
+      const res =  postData("/auth/login", credentials);
+      localStorage.setItem("token", res.data.token);
       if (res.data.isAdmin) {
         dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
 
@@ -34,8 +36,8 @@ const Login = () => {
           payload: { message: "You are not allowed!" },
         });
       }
-    } catch (err) {
-      dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });
+    } catch {
+      dispatch({ type: "LOGIN_FAILURE", payload: err });
     }
   };
 

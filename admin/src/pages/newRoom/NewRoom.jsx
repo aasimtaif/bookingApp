@@ -4,14 +4,15 @@ import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from "react";
 import { roomInputs } from "../../formSource";
-import useFetch from "../../hooks/useFetch";
+import { useFetch } from "../../hooks/useFetch";
+import { useApiCalls } from "../../hooks/useApiCalls";
 import axios from "axios";
 
 const NewRoom = () => {
   const [info, setInfo] = useState({});
   const [hotelId, setHotelId] = useState(undefined);
   const [rooms, setRooms] = useState([]);
-
+  const { postData } = useApiCalls()
   const { data, loading, error } = useFetch("/hotels");
 
   const handleChange = (e) => {
@@ -22,13 +23,13 @@ const NewRoom = () => {
     e.preventDefault();
     const roomNumbers = rooms?.split(",").map((room) => ({ number: room }));
     try {
-      await axios.post(`/rooms/${hotelId}`, { ...info, roomNumbers });
+       postData(`/rooms/${hotelId}`, { ...info, roomNumbers });
     } catch (err) {
       console.log(err);
     }
   };
 
-  console.log(info,rooms)
+  console.log(info, rooms)
   return (
     <div className="new">
       <Sidebar />
@@ -67,9 +68,9 @@ const NewRoom = () => {
                   {loading
                     ? "loading"
                     : data &&
-                      data.map((hotel) => (
-                        <option key={hotel._id} value={hotel._id}>{hotel.name}--{hotel.city}</option>
-                      ))}
+                    data.map((hotel) => (
+                      <option key={hotel._id} value={hotel._id}>{hotel.name}--{hotel.city}</option>
+                    ))}
                 </select>
               </div>
               <button onClick={handleClick}>Send</button>

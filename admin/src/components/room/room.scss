@@ -1,0 +1,61 @@
+.container {
+    .roomdetails {
+        border: thin solid rgb(186, 178, 178);
+        border-radius: 10px;
+        margin: 1rem;
+
+        .top {
+            display: flex;
+            flex-direction: column;
+
+            p {
+                font-weight: 600;
+            }
+        }
+
+        .bottom {
+            box-shadow: none;
+
+            h3 {}
+
+            .roomList {
+                p {
+                    font-size: medium;
+                    font-weight: bolder;
+                }
+
+                div {
+                    display: flex;
+                    flex-direction: row;
+                    margin-bottom: 1rem;
+
+                    // justify-content: space-evenly;
+                    p {
+                        font-size: medium;
+                        font-weight: bold;
+                        margin-right: auto;
+                    }
+                }
+            }
+        }
+
+        .action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            button {
+                background-color: #fb656a;
+                border: none;
+                margin: 1rem;
+                padding: 0.61rem;
+                border-radius: 5px;
+                font-size: medium;
+                font-weight: lighter;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                cursor: pointer;
+            }
+        }
+
+    }
+}

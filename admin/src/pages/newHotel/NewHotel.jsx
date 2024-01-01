@@ -4,13 +4,15 @@ import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from "react";
 import { hotelInputs } from "../../formSource";
-import useFetch from "../../hooks/useFetch";
+import { useFetch } from "../../hooks/useFetch";
+import { useApiCalls } from "../../hooks/useApiCalls";
 import axios from "axios";
 
 const NewHotel = () => {
   const [files, setFiles] = useState("");
   const [info, setInfo] = useState({});
   const [rooms, setRooms] = useState([]);
+  const { postData, err } = useApiCalls()
 
   const { data, loading, error } = useFetch("/rooms");
 
@@ -52,7 +54,7 @@ const NewHotel = () => {
         photos: list,
       };
 
-      await axios.post("/hotels", newhotel);
+     postData("/hotels", newhotel);
     } catch (err) { console.log(err) }
   };
   return (

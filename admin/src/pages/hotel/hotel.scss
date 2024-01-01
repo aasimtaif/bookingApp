@@ -5,24 +5,38 @@
 
     .top {
 
-            img{
-                width: 100%;
-                height:50%;
-                border-radius: 10px;
-            }
+        img {
+            width: 100%;
+            height: 50%;
+            border-radius: 10px;
+        }
     }
-    .details{
+
+    .details {
         padding-left: 2rem;
-        h1{
-            span{
+
+        h1 {
+            span {
                 color: #ff5a5f;
                 font-size: medium;
                 margin: 0.51rem;
             }
         }
-        p{
+
+        p {
             font-size: large;
-            margin:  0.51rem 0;
+            margin: 0.51rem 0;
         }
     }
+    hr{
+        margin:auto;
+        width:70%;
+    }
+
+    // .room {
+    //     padding:2rem;
+    //     margin: 2rem;
+    //     border: 0.1rem solid grey;
+    //     border-radius: 10px;
+    // }
 }

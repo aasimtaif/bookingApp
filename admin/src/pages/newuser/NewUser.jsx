@@ -4,15 +4,18 @@ import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from "react";
 import axios from "axios";
-
-const New = ({ inputs, title }) => {
+import { useApiCalls } from "../../hooks/useApiCalls";
+import { useNavigate } from "react-router-dom";
+const NewUser = ({ inputs, title }) => {
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
+  const { postData, err } = useApiCalls()
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
-
+  console.log(info)
   const handleClick = async (e) => {
     e.preventDefault();
     const data = new FormData();
@@ -31,7 +34,8 @@ const New = ({ inputs, title }) => {
         img: url,
       };
 
-      await axios.post("/auth/register", newUser);
+      postData("/auth/register", newUser);
+      navigate("/users")
     } catch (err) {
       console.log(err);
     }
@@ -82,6 +86,14 @@ const New = ({ inputs, title }) => {
                   />
                 </div>
               ))}
+              <label>
+                <input type="checkbox"
+                  defaultChecked={false}
+                  onChange={() => setInfo({...info, isAdmin: !info.isAdmin})}
+                />
+                IsAdmin
+              </label>
+
               <button onClick={handleClick}>Send</button>
             </form>
           </div>
@@ -91,4 +103,4 @@ const New = ({ inputs, title }) => {
   );
 };
 
-export default New;
+export default NewUser;
