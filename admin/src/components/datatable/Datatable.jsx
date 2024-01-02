@@ -32,12 +32,12 @@ const Datatable = ({ columns }) => {
             <Link to={`/${path}/${params.row._id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </Link>
-            <div
+            {path !== 'rooms' && <div
               className="deleteButton"
               onClick={() => handleDelete(params.row._id)}
             >
               Delete
-            </div>
+            </div>}
           </div>
         );
       },

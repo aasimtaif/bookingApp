@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap');
+
 .single {
   display: flex;
   width: 100%;
+
   .singleContainer {
     flex: 6;
 
@@ -40,9 +43,25 @@
           }
 
           .details {
-            .itemTitle {
-              margin-bottom: 10px;
-              color: #555;
+            .nameDetail {
+              display: flex;
+              flex-direction: row;
+
+              .itemTitle {
+                margin-bottom: 10px;
+                color: #555;
+              }
+
+              span {
+                p {
+                  color: rgb(225, 4, 4);
+                  font-size: 18px;
+                  font-weight: 600;
+                  margin-top: 1rem;
+                  margin-left: 0.31rem;
+                  font-family: 'Caveat', cursive;
+                }
+              }
             }
 
             .detailItem {

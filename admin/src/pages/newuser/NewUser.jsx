@@ -62,7 +62,7 @@ const NewUser = ({ inputs, title }) => {
             />
           </div>
           <div className="right">
-            <form>
+            <form onSubmit={handleClick}>
               <div className="formInput">
                 <label htmlFor="file">
                   Image: <DriveFolderUploadOutlinedIcon className="icon" />
@@ -83,18 +83,19 @@ const NewUser = ({ inputs, title }) => {
                     type={input.type}
                     placeholder={input.placeholder}
                     id={input.id}
+                    required
                   />
                 </div>
               ))}
               <label>
                 <input type="checkbox"
                   defaultChecked={false}
-                  onChange={() => setInfo({...info, isAdmin: !info.isAdmin})}
+                  onChange={() => setInfo({ ...info, isAdmin: !info.isAdmin })}
                 />
                 IsAdmin
               </label>
 
-              <button onClick={handleClick}>Send</button>
+              <button type="submit">Send</button>
             </form>
           </div>
         </div>
