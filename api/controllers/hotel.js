@@ -6,7 +6,7 @@ export const createHotel = async (req, res, next) => {
 
   try {
     const savedHotel = await newHotel.save();
-    res.status(200).json(savedHotel);
+    res.status(200).json({ message: "Hotel has been created.", savedHotel });
   } catch (err) {
     next(err);
   }
@@ -46,8 +46,8 @@ export const getHotels = async (req, res, next) => {
   try {
     const hotels = await Hotel.find({
       ...others,
-      cheapestPrice: { $gt: min | 1, $lt: max || 999 },
-    }).limit(req.query.limit);
+      cheapestPrice: { $gt: min | 1, $lt: max || Number.MAX_SAFE_INTEGER },
+    });
     res.status(200).json(hotels);
   } catch (err) {
     next(err);

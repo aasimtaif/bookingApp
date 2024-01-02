@@ -27,7 +27,7 @@ mongoose.connection.on("disconnected", () => {
 });
 
 //middlewares
-app.use(cors( {  credentials: 'true'}))
+app.use(cors({ credentials: 'true' }))
 app.use(cookieParser())
 app.use(express.json());
 
@@ -46,7 +46,9 @@ app.use((err, req, res, next) => {
     stack: err.stack,
   });
 });
-
+app.get("/", (req, res) => {
+  res.send("Welcome to the backend of the hotel booking app.");
+})
 app.listen(8800, () => {
   connect();
   console.log("Connected to backend.");
