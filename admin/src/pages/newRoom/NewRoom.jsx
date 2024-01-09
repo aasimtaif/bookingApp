@@ -1,12 +1,11 @@
 import "./newRoom.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
-import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from "react";
 import { roomInputs } from "../../formSource";
 import { useFetch } from "../../hooks/useFetch";
 import { useApiCalls } from "../../hooks/useApiCalls";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const NewRoom = () => {
   const [info, setInfo] = useState({});
@@ -18,12 +17,14 @@ const NewRoom = () => {
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
+  const navigate = useNavigate()
 
   const handleClick = async (e) => {
     e.preventDefault();
     const roomNumbers = rooms?.split(",").map((room) => ({ number: room }));
     try {
-       postData(`/rooms/${hotelId}`, { ...info, roomNumbers });
+      await postData(`/rooms/${hotelId}`, { ...info, roomNumbers });
+      navigate("/rooms")
     } catch (err) {
       console.log(err);
     }

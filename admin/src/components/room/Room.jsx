@@ -2,13 +2,23 @@ import React from 'react'
 import { useFetch } from '../../hooks/useFetch'
 import { useApiCalls } from '../../hooks/useApiCalls';
 import moment from 'moment';
+import { ColorRing } from 'react-loader-spinner'
 import './room.scss'
 function Room({ hotelId }) {
   const { data, loading, error, reFetch } = useFetch(`hotels/room/${hotelId}`);
   const { deleteData } = useApiCalls()
   console.log(data)
-  if (loading || error) {
-    return <>laoding</>
+  if (loading) {
+    return (
+      <div className="loader">
+        <ColorRing
+          color="#00BFFF"
+          height={300}
+          width={300}
+          timeout={3000}
+        />
+      </div>
+    );
   }
   const handleDelete = async (id) => {
     console.log(id, hotelId)

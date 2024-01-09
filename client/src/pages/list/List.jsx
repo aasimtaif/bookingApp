@@ -13,16 +13,15 @@ const List = () => {
   const [destination, setDestination] = useState(location.state.destination);
   const [dates, setDates] = useState(location.state.dates);
   const [openDate, setOpenDate] = useState(false);
-  const [options, setOptions] = useState(location.state.options);
   const [min, setMin] = useState(undefined);
   const [max, setMax] = useState(undefined);
 
   const { data, loading, error, reFetch } = useFetch(
-    `/hotels?city=${destination}&min=${min || 0}&max=${max || 999}`
+    `/hotels?city=${destination}&min=${min || 0}&max=${max || Number.MAX_SAFE_INTEGER}`
   );
 
   const handleClick = () => {
-    reFetch();
+    reFetch(`/hotels?city=${destination}&min=${min || 0}&max=${max || Number.MAX_SAFE_INTEGER}`);
   };
 
   return (
@@ -35,7 +34,7 @@ const List = () => {
             <h1 className="lsTitle">Search</h1>
             <div className="lsItem">
               <label>Destination</label>
-              <input placeholder={destination} type="text" onChange={(e) => {setDestination(e.target.value) }} />
+              <input placeholder={destination} type="text" onChange={(e) => { setDestination(e.target.value) }} />
             </div>
             <div className="lsItem">
               <label>Check-in Date</label>
@@ -50,58 +49,6 @@ const List = () => {
                   ranges={dates}
                 />
               )}
-            </div>
-            <div className="lsItem">
-              <label>Options</label>
-              <div className="lsOptions">
-                <div className="lsOptionItem">
-                  <span className="lsOptionText">
-                    Min price <small>per night</small>
-                  </span>
-                  <input
-                    type="number"
-                    onChange={(e) => setMin(e.target.value)}
-                    className="lsOptionInput"
-                  />
-                </div>
-                <div className="lsOptionItem">
-                  <span className="lsOptionText">
-                    Max price <small>per night</small>
-                  </span>
-                  <input
-                    type="number"
-                    onChange={(e) => setMax(e.target.value)}
-                    className="lsOptionInput"
-                  />
-                </div>
-                <div className="lsOptionItem">
-                  <span className="lsOptionText">Adult</span>
-                  <input
-                    type="number"
-                    min={1}
-                    className="lsOptionInput"
-                    placeholder={options.adult}
-                  />
-                </div>
-                <div className="lsOptionItem">
-                  <span className="lsOptionText">Children</span>
-                  <input
-                    type="number"
-                    min={0}
-                    className="lsOptionInput"
-                    placeholder={options.children}
-                  />
-                </div>
-                <div className="lsOptionItem">
-                  <span className="lsOptionText">Room</span>
-                  <input
-                    type="number"
-                    min={1}
-                    className="lsOptionInput"
-                    placeholder={options.room}
-                  />
-                </div>
-              </div>
             </div>
             <button onClick={handleClick}>Search</button>
           </div>

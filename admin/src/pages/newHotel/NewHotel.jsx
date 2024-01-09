@@ -7,17 +7,22 @@ import { hotelInputs } from "../../formSource";
 import { useFetch } from "../../hooks/useFetch";
 import { useApiCalls } from "../../hooks/useApiCalls";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const NewHotel = () => {
   const [files, setFiles] = useState("");
   const [info, setInfo] = useState({});
   const [rooms, setRooms] = useState([]);
   const { postData, err } = useApiCalls()
-
+  const navigate = useNavigate();
   const { data, loading, error } = useFetch("/rooms");
 
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    if (e.target.id === 'city') {
+      setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value.toLowerCase() }));
+    } else {
+      setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    }
   };
 
   const handleSelect = (e) => {
@@ -28,7 +33,7 @@ const NewHotel = () => {
     setRooms(value);
   };
 
-  console.log(files)
+  console.log(files,info)
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -39,7 +44,7 @@ const NewHotel = () => {
           data.append("file", file);
           data.append("upload_preset", "upload");
           const uploadRes = await axios.post(
-            "https://api.cloudinary.com/v1_1/dndmxaxc8/image/upload",
+            "https://api.cloudinary.com/v1_1/dndmxaxc8/image/hotels",
             data
           );
 
@@ -54,7 +59,8 @@ const NewHotel = () => {
         photos: list,
       };
 
-     postData("/hotels", newhotel);
+      await postData("/hotels", newhotel);
+      navigate("/hotels");
     } catch (err) { console.log(err) }
   };
   return (
@@ -77,7 +83,7 @@ const NewHotel = () => {
             />
           </div>
           <div className="right">
-            <form>
+            <form onSubmit={handleClick}>
               <div className="formInput">
                 <label htmlFor="file">
                   Image: <DriveFolderUploadOutlinedIcon className="icon" />
@@ -88,6 +94,7 @@ const NewHotel = () => {
                   multiple
                   onChange={(e) => setFiles(e.target.files)}
                   style={{ display: "none" }}
+                  required
                 />
               </div>
 
@@ -99,6 +106,7 @@ const NewHotel = () => {
                     onChange={handleChange}
                     type={input.type}
                     placeholder={input.placeholder}
+                    required
                   />
                 </div>
               ))}
@@ -122,7 +130,7 @@ const NewHotel = () => {
                     ))}
                 </select>
               </div>
-              <button onClick={handleClick}>Send</button>
+              <button type="submit" >Send</button>
             </form>
           </div>
         </div>

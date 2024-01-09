@@ -20,11 +20,12 @@ const Login = () => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
-  const handleClick =  (e) => {
+  const handleClick =  async(e) => {
     e.preventDefault();
     dispatch({ type: "LOGIN_START" });
     try {
-      const res =  postData("/auth/login", credentials);
+      const res = await postData("/auth/login", credentials);
+      console.log(res)
       localStorage.setItem("token", res.data.token);
       if (res.data.isAdmin) {
         dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });

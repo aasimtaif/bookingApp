@@ -3,6 +3,8 @@ import { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { DNA } from 'react-loader-spinner'
+import { useApiCalls } from "../../hooks/useApiCalls";
+
 import "./Register.css";
 
 const Register = () => {
@@ -10,6 +12,7 @@ const Register = () => {
         username: undefined,
         password: undefined,
     });
+    const { postData, err } = useApiCalls()
 
     const { loading, error, dispatch } = useContext(AuthContext);
 
@@ -23,7 +26,7 @@ const Register = () => {
         e.preventDefault();
         dispatch({ type: "LOGIN_START" });
         try {
-            const res = await axios.post("http://localhost:8800/api/auth/register", credentials);
+            const res = await postData("/auth/register", credentials);
             dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
             navigate(-1)
         } catch (err) {

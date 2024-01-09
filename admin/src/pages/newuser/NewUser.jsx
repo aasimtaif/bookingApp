@@ -23,9 +23,10 @@ const NewUser = ({ inputs, title }) => {
     data.append("upload_preset", "upload");
     try {
       const uploadRes = await axios.post(
-        "https://api.cloudinary.com/v1_1/dndmxaxc8/image/upload",
+        "https://api.cloudinary.com/v1_1/dndmxaxc8/image/users",
         data
       );
+      console.log(uploadRes.data)
 
       const { url } = uploadRes.data;
 
@@ -34,8 +35,9 @@ const NewUser = ({ inputs, title }) => {
         img: url,
       };
 
-      postData("/auth/register", newUser);
-      navigate("/users")
+      await postData("/auth/register", newUser)
+        navigate("/users")
+      
     } catch (err) {
       console.log(err);
     }

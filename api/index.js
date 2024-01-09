@@ -7,6 +7,8 @@ import hotelsRoute from "./routes/hotels.js";
 import roomsRoute from "./routes/rooms.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { prisma } from "./config/prisma.config.js";
+
 
 const app = express();
 dotenv.config()
@@ -15,16 +17,14 @@ dotenv.config()
 
 const connect = async () => {
   try {
-    await mongoose.connect(process.env.MONGO);
-    console.log("Connected to mongoDB.");
+    await prisma.$connect();
+    console.log("Connected to database.");
   } catch (error) {
-    throw error;
+    console.log("Error connecting to database.");
   }
 };
 
-mongoose.connection.on("disconnected", () => {
-  console.log("mongoDB disconnected!");
-});
+
 
 //middlewares
 app.use(cors({ credentials: 'true' }))
@@ -49,7 +49,7 @@ app.use((err, req, res, next) => {
 app.get("/", (req, res) => {
   res.send("Welcome to the backend of the hotel booking app.");
 })
-app.listen(8800, () => {
+app.listen(6800, () => {
   connect();
-  console.log("Connected to backend.");
+  console.log("Connected to backend.at port 6800");
 });

@@ -1,12 +1,15 @@
 import Hotel from "../models/Hotel.js";
 import Room from "../models/Room.js";
+import { prisma } from "../config/prisma.config.js";
 
 export const createHotel = async (req, res, next) => {
-  const newHotel = new Hotel(req.body);
-
   try {
-    const savedHotel = await newHotel.save();
-    res.status(200).json({ message: "Hotel has been created.", savedHotel });
+    const hotel = await prisma.hotel.create({
+      data: {
+        ...req.body
+      }
+    });
+    res.status(200).json({ message: "Hotel has been created.", hotel });
   } catch (err) {
     next(err);
   }
@@ -40,15 +43,17 @@ export const getHotel = async (req, res, next) => {
   }
 };
 export const getHotels = async (req, res, next) => {
-  const { min, max, ...others } = req.query;
-  console.log(min, max, others)
-
+  const { ...conditions } = req.query;
   try {
-    const hotels = await Hotel.find({
-      ...others,
-      cheapestPrice: { $gt: min | 1, $lt: max || Number.MAX_SAFE_INTEGER },
+    const hotel = await prisma.hotel.findMany({
+      where: {
+        ...conditions
+      },
+      include: {
+        rooms: true,
+      },
     });
-    res.status(200).json(hotels);
+    res.json(hotel);
   } catch (err) {
     next(err);
   }
@@ -59,7 +64,12 @@ export const countByCity = async (req, res, next) => {
   try {
     const list = await Promise.all(
       cities.map((city) => {
-        return Hotel.countDocuments({ city: city });
+        console.log(city)
+        return prisma.hotel.count({
+          where: {
+            city,
+          },
+        });
       })
     );
     res.status(200).json(list);

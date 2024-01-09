@@ -32,7 +32,7 @@ const Header = ({ type }) => {
   });
 
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user, dispatch: authDispatch } = useContext(AuthContext);
 
 
   const handleOption = (name, operation) => {
@@ -67,10 +67,12 @@ const Header = ({ type }) => {
               Get rewarded for your travels – unlock instant savings of 10% or
               more with a free Lamabooking account
             </p>
-            {!user &&
+            {!user ?
               <Link to="/login">
                 <button className="headerBtn">Sign in / Register</button>
               </Link>
+              :
+              <button className="headerBtn" onClick={() => { authDispatch({ type: "LOGOUT" }) }}>Logout</button>
             }
             <div className="headerSearch">
               <div className="headerSearchItem">

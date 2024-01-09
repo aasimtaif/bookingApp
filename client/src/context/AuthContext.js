@@ -23,6 +23,9 @@ const AuthReducer = (state, action) => {
         error: null,
       };
     case "LOGIN_FAILURE":
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+
       return {
         user: null,
         loading: false,
