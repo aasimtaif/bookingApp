@@ -1,30 +1,15 @@
 import React from 'react'
-import { useFetch } from '../../hooks/useFetch'
 import { useApiCalls } from '../../hooks/useApiCalls';
 import moment from 'moment';
-import { ColorRing } from 'react-loader-spinner'
 import './room.scss'
-function Room({ hotelId }) {
-  const { data, loading, error, reFetch } = useFetch(`hotels/room/${hotelId}`);
+function Room({ data }) {
+  // const { data, loading, error, reFetch } = useFetch(`hotels/room/${hotelId}`);
   const { deleteData } = useApiCalls()
   console.log(data)
-  if (loading) {
-    return (
-      <div className="loader">
-        <ColorRing
-          color="#00BFFF"
-          height={300}
-          width={300}
-          timeout={3000}
-        />
-      </div>
-    );
-  }
+
   const handleDelete = async (id) => {
-    console.log(id, hotelId)
     try {
-      deleteData(`/rooms/${id}/${hotelId}`)
-      reFetch(`hotels/room/${hotelId}`)
+      deleteData(`/rooms/${id}`)
     } catch (err) {
       console.log(err)
     }
@@ -37,28 +22,27 @@ function Room({ hotelId }) {
             <h2>{info?.title}</h2>
             <p>{info?.desc}</p>
             <p>maxPeople - {info?.maxPeople}</p>
-            <p>cheapest Price - {info?.price} $ </p>
           </div>
           <div className="bottom">
             <h3>
               Rooms
             </h3>
-            {info?.roomNumbers.map((room, index) => (
+            {info?.roomNumber.map((room, index) => (
               <div className="roomList" key={index}>
                 <p>Room number {room?.number}</p>
-                {room?.unavailableDates?.length !== 0
-                  && <div>
+                {room?.unAvailableDates?.length !== 0 ?
+                  <div>
                     <p>Unavailable Dates </p>
-                    {room?.unavailableDates?.map((date, index) => (
+                    {room?.unAvailableDates?.map((date, index) => (
                       <p key={index}>{moment(date).format("MMM Do YY")}</p>
                     ))}
-                  </div>
+                  </div> : "available"
                 }
               </div>
             ))}
           </div>
           <div className="action">
-            <button onClick={() => handleDelete(info._id)}>Delete</button>
+            <button onClick={() => handleDelete(info.id)}>Delete</button>
           </div>
         </div>
       ))}

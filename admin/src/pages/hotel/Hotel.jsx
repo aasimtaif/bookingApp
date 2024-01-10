@@ -15,6 +15,7 @@ import "./hotel.scss";
 function Hotel() {
     const { productId } = useParams()
     const { data, loading, error } = useFetch(`hotels/find/${productId}`);
+    console.log(data.rooms)
     if (loading) {
         return (
             <div className="loader">
@@ -27,7 +28,7 @@ function Hotel() {
             </div>
         );
     }
-    console.log(data.name)
+    console.log(data)
     return (
         <div className="single">
             <Sidebar />
@@ -59,7 +60,7 @@ function Hotel() {
                         <p>Price -{data.cheapestPrice} $</p>
                     </div>
                     <div className="room">
-                        <Room hotelId={productId} />
+                        <Room data={data.rooms} />
                     </div>
                 </div>
             </div>

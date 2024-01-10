@@ -125,6 +125,7 @@ export const getUsers = async (req, res, next) => {
       select: {
         password: false,
         id: true,
+        userName: true,
         email: true,
         phone: true,
         city: true,
@@ -168,6 +169,7 @@ export const getUsers = async (req, res, next) => {
         email: user.email,
         phone: user.phone,
         city: user.city,
+        username: user.userName,
         country: user.country,
         img: user.img,
         isAdmin: user.isAdmin,

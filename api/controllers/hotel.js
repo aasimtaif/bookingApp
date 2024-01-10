@@ -91,7 +91,7 @@ export const deleteHotel = async (req, res, next) => {
 export const getHotel = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const hotel = await prisma.hotel.findMany({
+    const hotel = await prisma.hotel.findUnique({
       where: {
         id: id
       },
@@ -99,7 +99,9 @@ export const getHotel = async (req, res, next) => {
         rooms: {
           select: {
             title: true,
+            id: true,
             desc: true,
+            maxPeople: true,
             roomNumber: {
               select: {
                 number: true,
@@ -185,9 +187,9 @@ export const countByType = async (req, res, next) => {
 
 export const getHotelRooms = async (req, res, next) => {
   const { id } = req.params;
-  
+
   try {
- const list = await prisma.rooms.findMany({
+    const list = await prisma.rooms.findMany({
       where: {
         hotelId: id,
       },
@@ -199,7 +201,7 @@ export const getHotelRooms = async (req, res, next) => {
           }
         }
       }
- })
+    })
     res.status(200).json(list)
   } catch (err) {
     next(err);

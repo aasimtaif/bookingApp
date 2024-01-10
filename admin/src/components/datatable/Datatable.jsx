@@ -33,12 +33,12 @@ const Datatable = ({ columns }) => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to={`/${path}/${params.row._id}`} style={{ textDecoration: "none" }}>
+            <Link to={`/${path}/${params.row.id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </Link>
             {path !== 'rooms' && <div
               className="deleteButton"
-              onClick={() => handleDelete(params.row._id)}
+              onClick={() => handleDelete(params.row.id)}
             >
               Delete
             </div>}
@@ -75,7 +75,7 @@ const Datatable = ({ columns }) => {
         pageSize={9}
         rowsPerPageOptions={[9]}
         checkboxSelection
-        getRowId={(row) => row._id}
+        getRowId={(row) =>row.id}
       />}
     </div>
   );
