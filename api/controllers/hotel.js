@@ -1,14 +1,28 @@
 import { prisma } from "../config/prisma.config.js";
 
 export const createHotel = async (req, res, next) => {
+  const { hotelDetails, roomDetails: { roomNumbers, ...otherRoomDetails } } = req.body;
+  console.log(hotelDetails, roomNumbers, otherRoomDetails)
   try {
     const hotel = await prisma.hotel.create({
       data: {
-        ...req.body
+        ...hotelDetails,
+        rooms: {
+          create: {
+            ...otherRoomDetails,
+            roomNumber: {
+              create: roomNumbers.map((room) => ({
+                number: room
+              }))
+            }
+          }
+        }
       }
-    });
+    })
+
     res.status(200).json({ message: "Hotel has been created.", hotel });
   } catch (err) {
+    console.log(err)
     next(err);
   }
 };

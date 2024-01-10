@@ -3,7 +3,7 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from "react";
-import { hotelInputs } from "../../formSource";
+import { hotelInputs, roomInputs } from "../../formSource";
 import { useFetch } from "../../hooks/useFetch";
 import { useApiCalls } from "../../hooks/useApiCalls";
 import axios from "axios";
@@ -11,32 +11,33 @@ import { useNavigate } from "react-router-dom";
 
 const NewHotel = () => {
   const [files, setFiles] = useState("");
-  const [info, setInfo] = useState({});
+  const [hotel, setHotel] = useState({});
   const [rooms, setRooms] = useState([]);
   const { postData, err } = useApiCalls()
   const navigate = useNavigate();
-  const { data, loading, error } = useFetch("/rooms");
+
 
   const handleChange = (e) => {
-    if (e.target.id === 'city') {
-      setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value.toLowerCase() }));
+    if (e.target.id === 'city' || e.target.id === 'type') {
+      setHotel((prev) => ({ ...prev, [e.target.id]: e.target.value.toLowerCase() }));
     } else {
-      setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+      setHotel((prev) => ({ ...prev, [e.target.id]: e.target.value }));
     }
   };
 
-  const handleSelect = (e) => {
-    const value = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value
-    );
-    setRooms(value);
-  };
-
-  console.log(files,info)
-
+  const handleRoomChange = (e) => {
+    console.log(e.target.type)
+    if (e.target.type === 'number') {
+      setRooms({ ...rooms, [e.target.id]: parseInt(e.target.value) });
+      return
+    }
+    setRooms({ ...rooms, [e.target.id]: e.target.value });
+  }
   const handleClick = async (e) => {
     e.preventDefault();
+    const roomNumbers = rooms?.roomNumbers?.split(",").map((room) => parseInt(room));
+    console.log(typeof (roomNumbers[0]))
+    rooms.roomNumbers = roomNumbers
     try {
       const list = await Promise.all(
         Object.values(files).map(async (file) => {
@@ -44,7 +45,7 @@ const NewHotel = () => {
           data.append("file", file);
           data.append("upload_preset", "upload");
           const uploadRes = await axios.post(
-            "https://api.cloudinary.com/v1_1/dndmxaxc8/image/hotels",
+            "https://api.cloudinary.com/v1_1/dndmxaxc8/image/upload",
             data
           );
 
@@ -54,11 +55,17 @@ const NewHotel = () => {
       );
 
       const newhotel = {
-        ...info,
-        rooms,
-        photos: list,
-      };
+        hotelDetails: {
+          ...hotel,
+          photos: list,
+        },
+        roomDetails: {
+          ...rooms,
 
+        },
+      };
+      newhotel.hotelDetails.cheapestPrice = parseInt(newhotel.hotelDetails.cheapestPrice)
+      console.log(newhotel)
       await postData("/hotels", newhotel);
       navigate("/hotels");
     } catch (err) { console.log(err) }
@@ -110,26 +117,37 @@ const NewHotel = () => {
                   />
                 </div>
               ))}
+              {/* <div className="formInput"> */}
+              <label>
+                Featured
+                <input type="checkbox"
+                  defaultChecked={false}
+                  onChange={() => setHotel({ ...hotel, featured: !hotel.featured })}
+                />
+              </label>
+              {/* </div> */}
+
+              {roomInputs.map((input) => (
+                <div className="formInput" key={input.id}>
+                  <label>{input.label}</label>
+                  <input
+                    id={input.id}
+                    onChange={handleRoomChange}
+                    type={input.type}
+                    placeholder={input.placeholder}
+                    required
+                  />
+                </div>
+              ))}
               <div className="formInput">
-                <label>Featured</label>
-                <select id="featured" onChange={handleChange}>
-                  <option value={false}>No</option>
-                  <option value={true}>Yes</option>
-                </select>
-              </div>
-              <div className="selectRooms">
                 <label>Rooms</label>
-                <select id="rooms" multiple onChange={handleSelect}>
-                  {loading
-                    ? "loading"
-                    : data &&
-                    data.map((room) => (
-                      <option key={room._id} value={room._id}>
-                        {room.title}
-                      </option>
-                    ))}
-                </select>
+                <textarea
+                  id="roomNumbers"
+                  onChange={handleRoomChange}
+                  placeholder="give comma between room numbers."
+                />
               </div>
+
               <button type="submit" >Send</button>
             </form>
           </div>

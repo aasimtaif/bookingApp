@@ -1,4 +1,5 @@
 import "./datatable.scss";
+
 import { DataGrid } from "@mui/x-data-grid";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -11,10 +12,10 @@ const Datatable = ({ columns }) => {
 
   const { data, loading, error, reFetch } = useFetch(`/${path}`);
   const { deleteData } = useApiCalls()
-  const [list, setList] = useState();
+
   useEffect(() => {
-    setList(data);
-  }, [data]);
+    reFetch(`/${path}`)
+  }, [path]);
 
   const handleDelete = async (id) => {
     try {
@@ -47,7 +48,7 @@ const Datatable = ({ columns }) => {
       },
     },
   ];
-  console.log(list)
+
   if (loading) {
     return (
       <div className="loader">
@@ -75,7 +76,7 @@ const Datatable = ({ columns }) => {
         pageSize={9}
         rowsPerPageOptions={[9]}
         checkboxSelection
-        getRowId={(row) =>row.id}
+        getRowId={(row) => row.id}
       />}
     </div>
   );
