@@ -1,0 +1,36 @@
+.singleRoomPage {
+    margin: 2rem;
+
+    .container {
+
+        height: 100%;
+        width: 100%;
+
+        .top {
+
+            img {
+                width: 100%;
+                height: 50%;
+                border-radius: 10px;
+            }
+        }
+
+        .hotelDetails {
+            padding-left: 2rem;
+
+            h1 {
+                span {
+                    color: #ff5a5f;
+                    font-size: medium;
+                    margin: 0.51rem;
+                }
+            }
+
+            p {
+                font-size: large;
+                margin: 0.51rem 0;
+            }
+        }
+
+    }
+}

@@ -38,9 +38,9 @@ function Hotel() {
                     <div className="top">
                         <Box sx={{ flexGrow: 1 }}>
                             <Grid container spacing={1}>
-                                {data?.photos?.map((photo) => {
+                                {data?.photos?.map((photo, index) => {
                                     return (
-                                        <Grid item xs={12 / (data?.photos?.length + 1)}>
+                                        <Grid key={index} item xs={20 / (data?.photos?.length + 1)}>
                                             <div className='images'>
                                                 <img src={photo} />
                                             </div>

@@ -2,7 +2,6 @@ import { prisma } from "../config/prisma.config.js";
 
 export const createHotel = async (req, res, next) => {
   const { hotelDetails, roomDetails: { roomNumbers, ...otherRoomDetails } } = req.body;
-  console.log(hotelDetails, roomNumbers, otherRoomDetails)
   try {
     const hotel = await prisma.hotel.create({
       data: {
@@ -135,6 +134,8 @@ export const getHotel = async (req, res, next) => {
 };
 export const getHotels = async (req, res, next) => {
   const { ...conditions } = req.query;
+  if (conditions.featured) conditions.featured = true
+
   try {
     const hotel = await prisma.hotel.findMany({
       where: {
@@ -146,6 +147,7 @@ export const getHotels = async (req, res, next) => {
     });
     res.json(hotel);
   } catch (err) {
+    console.log(err.message)
     next(err);
   }
 };
@@ -155,11 +157,11 @@ export const countByCity = async (req, res, next) => {
   try {
     const list = await Promise.all(
       cities.map((city) => {
-        console.log(city)
         return prisma.hotel.count({
           where: {
             city,
           },
+
         });
       })
     );

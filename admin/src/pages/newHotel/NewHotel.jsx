@@ -8,11 +8,15 @@ import { useFetch } from "../../hooks/useFetch";
 import { useApiCalls } from "../../hooks/useApiCalls";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ColorRing } from 'react-loader-spinner'
+
+
 
 const NewHotel = () => {
   const [files, setFiles] = useState("");
   const [hotel, setHotel] = useState({});
   const [rooms, setRooms] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
   const { postData, err } = useApiCalls()
   const navigate = useNavigate();
 
@@ -35,8 +39,9 @@ const NewHotel = () => {
   }
   const handleClick = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
     const roomNumbers = rooms?.roomNumbers?.split(",").map((room) => parseInt(room));
-    console.log(typeof (roomNumbers[0]))
+
     rooms.roomNumbers = roomNumbers
     try {
       const list = await Promise.all(
@@ -65,11 +70,27 @@ const NewHotel = () => {
         },
       };
       newhotel.hotelDetails.cheapestPrice = parseInt(newhotel.hotelDetails.cheapestPrice)
-      console.log(newhotel)
       await postData("/hotels", newhotel);
-      navigate("/hotels");
+      setIsLoading(false)
+      setTimeout(() => {
+        navigate("/hotels");
+      }, 1000)
     } catch (err) { console.log(err) }
   };
+
+
+  if (isLoading) {
+    return (
+      <div className="loader">
+        <ColorRing
+          color="#00BFFF"
+          height={300}
+          width={300}
+          timeout={3000}
+        />
+      </div>
+    );
+  }
   return (
     <div className="new">
       <Sidebar />

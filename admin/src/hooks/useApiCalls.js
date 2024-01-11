@@ -4,7 +4,6 @@ import API from "../util/API";
 
 export const useApiCalls = () => {
     const [err, setErr] = useState(false);
-
     const deleteData = async (url) => {
         try {
             await API.delete(url)
@@ -13,9 +12,10 @@ export const useApiCalls = () => {
         }
     }
     const postData = async (url, info) => {
-        console.log(url, info)
+
         try {
             const response = await API.post(url, info)
+
             return response
         } catch (error) {
             setErr(err)
@@ -29,5 +29,5 @@ export const useApiCalls = () => {
         }
     }
 
-    return { deleteData, postData, updateData, err }
+    return { deleteData, postData, updateData, err, }
 }

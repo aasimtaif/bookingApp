@@ -17,20 +17,20 @@ function Room({ data }) {
   return (
     <div className="container">
       {data?.map((info) => (
-        <div className="roomdetails" key={info?._id}>
+        <div className="roomdetails" key={info.id}>
           <div className="top">
-            <h2>{info?.title}</h2>
-            <p>{info?.desc}</p>
-            <p>maxPeople - {info?.maxPeople}</p>
+            <h2>{info.title}</h2>
+            <p>{info.desc}</p>
+            <p>maxPeople - {info.maxPeople}</p>
           </div>
           <div className="bottom">
             <h3>
               Rooms
             </h3>
-            {info?.roomNumber.map((room, index) => (
+            {info?.roomNumber?.map((room, index) => (
               <div className="roomList" key={index}>
                 <p>Room number {room?.number}</p>
-                {room?.unAvailableDates?.length !== 0 ?
+                {room.unAvailableDates?.length !== 0 ?
                   <div>
                     <p>Unavailable Dates </p>
                     {room?.unAvailableDates?.map((date, index) => (

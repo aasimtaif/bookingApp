@@ -6,11 +6,14 @@ import { roomInputs } from "../../formSource";
 import { useFetch } from "../../hooks/useFetch";
 import { useApiCalls } from "../../hooks/useApiCalls";
 import { useNavigate } from "react-router-dom";
+import { ColorRing } from 'react-loader-spinner'
+
 
 const NewRoom = () => {
   const [info, setInfo] = useState({});
   const [hotelId, setHotelId] = useState(undefined);
   const [rooms, setRooms] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
   const { postData } = useApiCalls()
   const { data, loading, error } = useFetch("/hotels");
 
@@ -18,19 +21,33 @@ const NewRoom = () => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
   const navigate = useNavigate()
-
   const handleClick = async (e) => {
     e.preventDefault();
-    const roomNumbers = rooms?.split(",").map((room) => ({ number: room }));
+    setIsLoading(true)
+    const roomNumber = rooms?.split(",").map((room) => (parseInt(room)));
+    info.maxPeople = parseInt(info.maxPeople)
+    console.log(info.maxPeople)
     try {
-      await postData(`/rooms/${hotelId}`, { ...info, roomNumbers });
+      await postData(`/rooms/${hotelId}`, { ...info, roomNumber });
+      setIsLoading(false)
       navigate("/rooms")
     } catch (err) {
       console.log(err);
     }
   };
 
-  console.log(info, rooms)
+  if (isLoading) {
+    return (
+      <div className="loader">
+        <ColorRing
+          color="#00BFFF"
+          height={300}
+          width={300}
+          timeout={3000}
+        />
+      </div>
+    );
+  }
   return (
     <div className="new">
       <Sidebar />
@@ -70,7 +87,7 @@ const NewRoom = () => {
                     ? "loading"
                     : data &&
                     data.map((hotel) => (
-                      <option key={hotel._id} value={hotel._id}>{hotel.name}--{hotel.city}</option>
+                      <option key={hotel.id} value={hotel.id}>{hotel.name}--{hotel.city}</option>
                     ))}
                 </select>
               </div>

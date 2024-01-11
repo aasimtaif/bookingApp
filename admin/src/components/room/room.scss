@@ -23,13 +23,15 @@
 
 .container {
     .roomdetails {
-        border: thin solid rgb(186, 178, 178);
+        border: thin solid rgb(228, 227, 227);
         border-radius: 10px;
         margin: 1rem;
 
         .top {
             display: flex;
             flex-direction: column;
+            margin:1rem 2rem;
+            gap: 20px;
 
             p {
                 font-weight: 600;
@@ -39,9 +41,17 @@
         .bottom {
             box-shadow: none;
 
-            h3 {}
+            h3 {
+                margin:1rem 2rem;
+
+            }
 
             .roomList {
+                margin: 2rem;
+                border-radius: 15px;
+                box-shadow: rgba(124, 40, 40, 0.1) 0px 10px 50px;
+                padding: 2rem;
+
                 p {
                     font-size: medium;
                     font-weight: bolder;

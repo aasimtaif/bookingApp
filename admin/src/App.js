@@ -13,6 +13,7 @@ import { hotelColumns, roomColumns, userColumns } from "./datatablesource";
 import NewHotel from "./pages/newHotel/NewHotel";
 import NewRoom from "./pages/newRoom/NewRoom";
 import Hotel from "./pages/hotel/Hotel";
+import RoomPage from "./pages/room/RoomPage";
 function App() {
   const { darkMode } = useContext(DarkModeContext);
 
@@ -105,7 +106,7 @@ function App() {
                 path=":productId"
                 element={
                   <ProtectedRoute>
-                    <Single />
+                    <RoomPage />
                   </ProtectedRoute>
                 }
               />
