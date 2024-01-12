@@ -19,8 +19,8 @@ const Header = ({ type }) => {
   const [openDate, setOpenDate] = useState(false);
   const [dates, setDates] = useState([
     {
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: new Date(Date.now()),
+      endDate: new Date(Date.now()),
       key: "selection",
     },
   ]);
@@ -43,14 +43,11 @@ const Header = ({ type }) => {
       };
     });
   };
-  console.log(dates)
   const { dispatch } = useContext(SearchContext);
-
   const handleSearch = () => {
-    dispatch({ type: "NEW_SEARCH", payload: { destination, dates, options } });
-    navigate("/hotels", { state: { destination, dates, options } });
+    dispatch({ type: "NEW_SEARCH", payload: { city: destination, dates, options } });
+    navigate("/hotels");
   };
-
   return (
     <div className="header">
       <div
@@ -89,10 +86,9 @@ const Header = ({ type }) => {
                 <span
                   onClick={() => setOpenDate(!openDate)}
                   className="headerSearchText"
-                >{`${format(dates[0].startDate, "MM/dd/yyyy")} to ${format(
-                  dates[0].endDate,
-                  "MM/dd/yyyy"
-                )}`}</span>
+                >{`${dates[0].startDate.toLocaleDateString('en-GB')} to ${dates[0].endDate.toLocaleDateString('en-GB')
+
+                  }`}</span>
                 {openDate && (
                   <DateRange
                     editableDateInputs={true}

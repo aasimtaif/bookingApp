@@ -117,6 +117,7 @@ export const getHotel = async (req, res, next) => {
             maxPeople: true,
             roomNumber: {
               select: {
+                id: true,
                 number: true,
                 unAvailableDates: true,
               }
