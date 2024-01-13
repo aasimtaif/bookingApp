@@ -7,7 +7,7 @@ import "./login.scss";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
-    username: undefined,
+    email: undefined,
     password: undefined,
   });
   const { postData, err } = useApiCalls()
@@ -20,7 +20,7 @@ const Login = () => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
-  const handleClick =  async(e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
     dispatch({ type: "LOGIN_START" });
     try {
@@ -47,8 +47,8 @@ const Login = () => {
       <div className="lContainer">
         <input
           type="text"
-          placeholder="username"
-          id="username"
+          placeholder="email"
+          id="email"
           onChange={handleChange}
           className="lInput"
         />
