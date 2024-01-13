@@ -31,6 +31,8 @@
     flex: 6;
 
     .top {
+      display: flex;
+      flex-direction: column;
       padding: 20px;
       display: flex;
       gap: 20px;

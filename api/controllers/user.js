@@ -58,6 +58,7 @@ export const getUser = async (req, res, next) => {
         isAdmin: true,
         Booking: {
           select: {
+            id: true,
             checkIn: true,
             checkOut: true,
             total: true,
@@ -97,6 +98,7 @@ export const getUser = async (req, res, next) => {
       isAdmin: user.isAdmin,
       bookings: [...user.Booking]?.map(booking => {
         return {
+          id: booking.id,
           checkIn: booking.checkIn,
           checkOut: booking.checkOut,
           total: booking.total,

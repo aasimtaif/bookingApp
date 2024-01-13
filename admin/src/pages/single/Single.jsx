@@ -5,7 +5,7 @@ import Navbar from "../../components/navbar/Navbar";
 import { useFetch } from "../../hooks/useFetch";
 import { useApiCalls } from "../../hooks/useApiCalls";
 import { DNA } from 'react-loader-spinner'
-
+import Booking from "../../components/Booking/Booking";
 const Single = () => {
   const pathname = (window.location.pathname).split("/")
   const { data, loading, error } = useFetch(`users/find/${pathname[2]}`);
@@ -25,7 +25,6 @@ const Single = () => {
       </div>
     )
   }
-console.log(openEdit)
   return (
     <div className="single">
       <Sidebar />
@@ -66,6 +65,9 @@ console.log(openEdit)
                 </div>
               </div>
             </div>
+          </div>
+          <div className="booking-section">
+            <Booking data={data.bookings} />
           </div>
         </div>
       </div>
