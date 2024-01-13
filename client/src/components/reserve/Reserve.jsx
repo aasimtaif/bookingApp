@@ -2,20 +2,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 import "./reserve.css";
-import useFetch from "../../hooks/useFetch";
+
 import { useContext, useState } from "react";
 import { SearchContext } from "../../context/SearchContext";
-import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useApiCalls } from "../../hooks/useApiCalls";
 const Reserve = ({ setOpen, data, total }) => {
   const [selectedRooms, setSelectedRooms] = useState([]);
   const { dates } = useContext(SearchContext);
+  const { user } = useContext(AuthContext);
   const { updateData } = useApiCalls()
+
+
   const getDatesInRange = (startDate, endDate) => {
     const start = new Date(startDate);
     const end = new Date(endDate);
-
     const date = new Date(start.getTime());
 
     const dates = [];
@@ -23,6 +25,7 @@ const Reserve = ({ setOpen, data, total }) => {
     while (date <= end) {
       dates.push(new Date(date).getTime());
       date.setDate(date.getDate() + 1);
+
     }
 
     return dates;
@@ -31,7 +34,7 @@ const Reserve = ({ setOpen, data, total }) => {
   const alldates = getDatesInRange(dates[0].startDate, dates[0].endDate);
 
   const isAvailable = (roomNumber) => {
-    const isFound = roomNumber.unavailableDates?.some((date) =>
+    const isFound = roomNumber.unAvailableDates?.some((date) =>
       alldates.includes(new Date(date).getTime())
     );
 
@@ -51,17 +54,23 @@ const Reserve = ({ setOpen, data, total }) => {
   const navigate = useNavigate();
 
   const handleClick = async () => {
-    console.log(selectedRooms, alldates)
-    // try {
-    //   const res = updateData(`/rooms/availability`, {
-    //     roomIds: selectedRooms
-    //     , dates
-    //     , userId
-    //     , total
-    //   });
-    //   setOpen(false);
-    //   navigate("/");
-    // } catch (err) { }
+    // console.log(selectedRooms.length)
+    console.log(new Date(alldates[0]).toISOString())
+    try {
+      const res = updateData(`/rooms/availability`, {
+        roomIds: selectedRooms,
+        dates: alldates.map((date) => new Date(date).toISOString()),
+        userId: user.id,
+        total: total * selectedRooms.length
+      });
+      if (res) {
+        setOpen(false);
+        navigate("/");
+
+      }
+    } catch (err) {
+      console.log(err)
+    }
   };
 
   return (
@@ -86,7 +95,7 @@ const Reserve = ({ setOpen, data, total }) => {
             <div className="rSelectRooms">
               {item.roomNumber?.map((roomNumber, index) => (
                 <div className="room" key={roomNumber.id}>
-                  <label>{roomNumber.number}2</label>
+                  <label>{roomNumber.number}</label>
                   <input
                     type="checkbox"
                     value={roomNumber.id}

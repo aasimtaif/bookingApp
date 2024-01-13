@@ -6,7 +6,7 @@ import "./login.css";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
-    username: undefined,
+    email: undefined,
     password: undefined,
   });
   const { postData, err } = useApiCalls()
@@ -37,8 +37,8 @@ const Login = () => {
       <div className="lContainer">
         <input
           type="text"
-          placeholder="username"
-          id="username"
+          placeholder="email"
+          id="email"
           onChange={handleChange}
           className="lInput"
         />

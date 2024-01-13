@@ -25,7 +25,7 @@ const List = () => {
   if (!dates) {
     return <h1>loading</h1>
   }
-  console.log(dates[0].endDate, dates[0].startDate)
+
 
   return (
     <div>

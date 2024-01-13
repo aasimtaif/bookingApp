@@ -8,7 +8,7 @@ import "./Register.css";
 
 const Register = () => {
     const [credentials, setCredentials] = useState({
-        username: undefined,
+        userName: undefined,
         password: undefined,
     });
     const { postData, err } = useApiCalls()
@@ -49,8 +49,8 @@ const Register = () => {
                 <div className="lContainer">
                     <input
                         type="text"
-                        placeholder="username"
-                        id="username"
+                        placeholder="userName"
+                        id="userName"
                         onChange={handleChange}
                         className="lInput"
                     />
@@ -79,7 +79,7 @@ const Register = () => {
                     </button>
                     <span className="register-button">
                         Already have an account?
-                        <Link to='/register' style={{ textDecoration: "none" }}>
+                        <Link to='/login' style={{ textDecoration: "none" }}>
                             <b>Login now.</b>
                         </Link>
                     </span>

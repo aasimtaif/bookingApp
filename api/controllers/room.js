@@ -40,10 +40,9 @@ export const updateRoom = async (req, res, next) => {
     next(err);
   }
 };
-export const updateRoomAvailability = async (req, res) => {
+export const updateRoomAvailability = async (req, res, next) => {
   const { roomIds, dates, userId, total } = req.body;
   try {
-
     const bookingPromises = roomIds.map(roomId => {
       return prisma.booking.create({
         data: {
