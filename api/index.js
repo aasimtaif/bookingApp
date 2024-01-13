@@ -18,7 +18,7 @@ dotenv.config()
 const connect = async () => {
   try {
     await prisma.$connect();
-    console.log("Connected to database.");
+    console.log("Connected to mongodb database.");
   } catch (error) {
     console.log("Error connecting to database.");
   }
