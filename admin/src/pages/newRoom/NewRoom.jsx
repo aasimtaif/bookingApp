@@ -10,12 +10,12 @@ import { ColorRing } from 'react-loader-spinner'
 
 
 const NewRoom = () => {
+  const { data, loading, error } = useFetch("/hotels");
   const [info, setInfo] = useState({});
   const [hotelId, setHotelId] = useState(undefined);
   const [rooms, setRooms] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
   const { postData } = useApiCalls()
-  const { data, loading, error } = useFetch("/hotels");
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -23,7 +23,11 @@ const NewRoom = () => {
   const navigate = useNavigate()
   const handleClick = async (e) => {
     e.preventDefault();
-    setIsLoading(true)
+    if (!hotelId) {
+      alert("Please select a hotel")
+      return
+    }
+    // setIsLoading(true)
     const roomNumber = rooms?.split(",").map((room) => (parseInt(room)));
     info.maxPeople = parseInt(info.maxPeople)
     console.log(info.maxPeople)
@@ -35,6 +39,7 @@ const NewRoom = () => {
       console.log(err);
     }
   };
+  console.log(data)
 
   if (isLoading) {
     return (
@@ -58,7 +63,7 @@ const NewRoom = () => {
         </div>
         <div className="bottom">
           <div className="right">
-            <form>
+            <form onSubmit={handleClick}>
               {roomInputs.map((input) => (
                 <div className="formInput" key={input.id}>
                   <label>{input.label}</label>
@@ -67,6 +72,7 @@ const NewRoom = () => {
                     type={input.type}
                     placeholder={input.placeholder}
                     onChange={handleChange}
+                    required
                   />
                 </div>
               ))}
@@ -75,6 +81,7 @@ const NewRoom = () => {
                 <textarea
                   onChange={(e) => setRooms(e.target.value)}
                   placeholder="give comma between room numbers."
+                  required
                 />
               </div>
               <div className="formInput">
@@ -82,7 +89,9 @@ const NewRoom = () => {
                 <select
                   id="hotelId"
                   onChange={(e) => setHotelId(e.target.value)}
+                  required
                 >
+                  <option value="">Select a hotel</option>
                   {loading
                     ? "loading"
                     : data &&
@@ -91,7 +100,7 @@ const NewRoom = () => {
                     ))}
                 </select>
               </div>
-              <button onClick={handleClick}>Send</button>
+              <button type="submit">Send</button>
             </form>
           </div>
         </div>

@@ -166,6 +166,7 @@ const NewHotel = () => {
                   id="roomNumbers"
                   onChange={handleRoomChange}
                   placeholder="give comma between room numbers."
+                  required
                 />
               </div>
 
