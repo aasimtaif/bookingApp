@@ -6,6 +6,7 @@ import StoreIcon from "@mui/icons-material/Store";
 
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
 import { Link, useNavigate } from "react-router-dom";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { AuthContext } from "../../context/AuthContext";
@@ -56,9 +57,15 @@ const Sidebar = () => {
               <span>Rooms</span>
             </li>
           </Link>
+          <Link to="/bookings" style={{ textDecoration: "none" }}>
+            <li>
+              <EventOutlinedIcon className="icon" />
+              <span>Bookings</span>
+            </li>
+          </Link>
           <p className="title">USER</p>
           <li>
-            <Link to={`/users/${user._id}`} style={{ textDecoration: "none" }}>
+            <Link to={`/users/${user.id}`} style={{ textDecoration: "none" }}>
               <AccountCircleOutlinedIcon className="icon" />
               <span>Profile</span>
             </Link>

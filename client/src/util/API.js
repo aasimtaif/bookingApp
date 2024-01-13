@@ -2,10 +2,7 @@ import axios from "axios";
 
 const API = axios.create({
     baseURL:
-        // "https://booking-app-server-2d07.onrender.com/api"
-        "http://localhost:6800/api"
-
-    ,
+        'https://https-booking-app-server.onrender.com/api'
 });
 API.interceptors.request.use(
     (config) => {
