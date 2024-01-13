@@ -29,10 +29,13 @@ const AuthReducer = (state, action) => {
         error: action.payload,
       };
     case "LOGOUT":
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
       return {
         user: null,
         loading: false,
         error: null,
+
       };
     default:
       return state;

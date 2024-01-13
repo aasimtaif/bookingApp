@@ -1,9 +1,9 @@
 export const userColumns = [
-  { field: "_id", headerName: "ID", width: 70 },
+  { field: "id", headerName: "ID", width: 70 },
   {
     field: "user",
     headerName: "User",
-    width: 230,
+    width: 150,
     renderCell: (params) => {
       return (
         <div className="cellWithImg">
@@ -37,7 +37,7 @@ export const userColumns = [
 ];
 
 export const hotelColumns = [
-  { field: "_id", headerName: "ID", width: 250 },
+  { field: "id", headerName: "ID", width: 100 },
   {
     field: "name",
     headerName: "Name",
@@ -61,22 +61,23 @@ export const hotelColumns = [
 ];
 
 export const roomColumns = [
-  { field: "_id", headerName: "ID", width: 70 },
+  { field: "id", headerName: "ID", width: 170 },
   {
     field: "title",
     headerName: "Title",
-    width: 230,
+    width: 130,
+  },
+  {
+    field: "hotelId",
+    headerName: "hotel",
+    width: 100,
   },
   {
     field: "desc",
     headerName: "Description",
     width: 200,
   },
-  {
-    field: "price",
-    headerName: "Price",
-    width: 100,
-  },
+
   {
     field: "maxPeople",
     headerName: "Max People",

@@ -1,33 +1,39 @@
-import User from "../models/User.js";
+
 import bcrypt from "bcryptjs";
 import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import { prisma } from "../config/prisma.config.js";
+
 
 export const register = async (req, res, next) => {
+  const { password, ...details } = req.body;
   try {
     const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(req.body.password, salt);
+    const hash = bcrypt.hashSync(password, salt);
 
-    const newUser = new User({
-      ...req.body,
-      password: hash,
+    const user = await prisma.user.create({
+      data: {
+        ...details,
+        password: hash
+      }
     });
 
-    await newUser.save();
-    res.status(200).send("User has been created.");
+    res.status(200).json({ message: "User has been created.", user });
   } catch (err) {
+    console.log(err)
     next(err);
   }
 };
 export const login = async (req, res, next) => {
   try {
-    const user = await User.findOne({ username: req.body.username });
+    const user = await prisma.user.findUnique({
+      where: {
+        email: req.body.email
+      }
+    });
     if (!user) return next(createError(404, "User not found!"));
 
-    const isPasswordCorrect = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
+    const isPasswordCorrect = bcrypt.compareSync(req.body.password, user.password)
     if (!isPasswordCorrect)
       return next(createError(400, "Wrong password or username!"));
 
@@ -36,11 +42,12 @@ export const login = async (req, res, next) => {
       process.env.JWT
     );
 
-    const { password, isAdmin, ...otherDetails } = user._doc;
+    const { password, isAdmin, ...otherDetails } = user;
     res
       .status(200)
-      .json({ details: { ...otherDetails }, isAdmin ,token });
+      .json({ details: { ...otherDetails }, isAdmin, token });
   } catch (err) {
+    console.log(err)
     next(err);
   }
 };

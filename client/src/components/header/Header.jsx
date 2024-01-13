@@ -19,8 +19,8 @@ const Header = ({ type }) => {
   const [openDate, setOpenDate] = useState(false);
   const [dates, setDates] = useState([
     {
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: new Date(Date.now()),
+      endDate: new Date(Date.now()),
       key: "selection",
     },
   ]);
@@ -32,7 +32,7 @@ const Header = ({ type }) => {
   });
 
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user, dispatch: authDispatch } = useContext(AuthContext);
 
 
   const handleOption = (name, operation) => {
@@ -43,14 +43,11 @@ const Header = ({ type }) => {
       };
     });
   };
-  console.log(dates)
   const { dispatch } = useContext(SearchContext);
-
   const handleSearch = () => {
-    dispatch({ type: "NEW_SEARCH", payload: { destination, dates, options } });
-    navigate("/hotels", { state: { destination, dates, options } });
+    dispatch({ type: "NEW_SEARCH", payload: { city: destination, dates, options } });
+    navigate("/hotels");
   };
-
   return (
     <div className="header">
       <div
@@ -67,10 +64,12 @@ const Header = ({ type }) => {
               Get rewarded for your travels – unlock instant savings of 10% or
               more with a free Lamabooking account
             </p>
-            {!user &&
+            {!user ?
               <Link to="/login">
                 <button className="headerBtn">Sign in / Register</button>
               </Link>
+              :
+              <button className="headerBtn" onClick={() => { authDispatch({ type: "LOGOUT" }) }}>Logout</button>
             }
             <div className="headerSearch">
               <div className="headerSearchItem">
@@ -79,7 +78,7 @@ const Header = ({ type }) => {
                   type="text"
                   placeholder="Where are you going?"
                   className="headerSearchInput"
-                  onChange={(e) => setDestination(e.target.value)}
+                  onChange={(e) => setDestination(e.target.value.toLowerCase())}
                 />
               </div>
               <div className="headerSearchItem">
@@ -87,10 +86,9 @@ const Header = ({ type }) => {
                 <span
                   onClick={() => setOpenDate(!openDate)}
                   className="headerSearchText"
-                >{`${format(dates[0].startDate, "MM/dd/yyyy")} to ${format(
-                  dates[0].endDate,
-                  "MM/dd/yyyy"
-                )}`}</span>
+                >{`${dates[0].startDate.toLocaleDateString('en-GB')} to ${dates[0].endDate.toLocaleDateString('en-GB')
+
+                  }`}</span>
                 {openDate && (
                   <DateRange
                     editableDateInputs={true}

@@ -1,16 +1,31 @@
 import "./single.scss";
+import { useState } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import { useFetch } from "../../hooks/useFetch";
 import { useApiCalls } from "../../hooks/useApiCalls";
+import { DNA } from 'react-loader-spinner'
+
 const Single = () => {
   const pathname = (window.location.pathname).split("/")
   const { data, loading, error } = useFetch(`users/find/${pathname[2]}`);
-
+  const [openEdit, setOpenEdit] = useState(false);
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <div className="loader">
+        <DNA
+          visible={true}
+          height="80"
+          width="80"
+          ariaLabel="dna-loading"
+          wrapperStyle={{}}
+          wrapperClass="dna-wrapper"
+        />
+      </div>
+    )
   }
+console.log(openEdit)
   return (
     <div className="single">
       <Sidebar />
@@ -18,7 +33,7 @@ const Single = () => {
         <Navbar />
         <div className="top">
           <div className="left">
-            <div className="editButton">Edit</div>
+            <div className="editButton" onClick={() => { setOpenEdit(!openEdit) }}>Edit</div>
             <h1 className="title">Information</h1>
             <div className="item">
               <img

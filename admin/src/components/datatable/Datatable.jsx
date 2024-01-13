@@ -1,10 +1,11 @@
 import "./datatable.scss";
+
 import { DataGrid } from "@mui/x-data-grid";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useFetch } from "../../hooks/useFetch";
 import { useApiCalls } from "../../hooks/useApiCalls";
-
+import { MagnifyingGlass } from 'react-loader-spinner'
 const Datatable = ({ columns }) => {
   const location = useLocation();
   const path = location.pathname.split("/")[1];
@@ -12,15 +13,19 @@ const Datatable = ({ columns }) => {
   const { data, loading, error, reFetch } = useFetch(`/${path}`);
   const { deleteData } = useApiCalls()
 
-  const handleDelete = (id) => {
+  useEffect(() => {
+    reFetch(`/${path}`)
+  }, [path]);
+
+  const handleDelete = async (id) => {
     try {
-      deleteData(`/${path}/${id}`);
+      await deleteData(`/${path}/${id}`)
       reFetch(`/${path}`)
     } catch (err) {
       console.log(err)
     }
+
   };
-  console.log(columns, path)
   const actionColumn = [
     {
       field: "action",
@@ -29,20 +34,33 @@ const Datatable = ({ columns }) => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to={`/${path}/${params.row._id}`} style={{ textDecoration: "none" }}>
+            <Link to={`/${path}/${params.row.id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </Link>
-            {path !== 'rooms' && <div
+            <div
               className="deleteButton"
-              onClick={() => handleDelete(params.row._id)}
+              onClick={() => handleDelete(params.row.id)}
             >
               Delete
-            </div>}
+            </div>
           </div>
         );
       },
     },
   ];
+
+  if (loading) {
+    return (
+      <div className="loader">
+        <MagnifyingGlass
+          color="#00BFFF"
+          height={300}
+          width={300}
+          timeout={3000}
+        />
+      </div>
+    );
+  }
   return (
     <div className="datatable">
       <div className="datatableTitle">
@@ -58,7 +76,7 @@ const Datatable = ({ columns }) => {
         pageSize={9}
         rowsPerPageOptions={[9]}
         checkboxSelection
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
       />}
     </div>
   );

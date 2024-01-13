@@ -3,35 +3,46 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from "react";
-import { hotelInputs } from "../../formSource";
+import { hotelInputs, roomInputs } from "../../formSource";
 import { useFetch } from "../../hooks/useFetch";
 import { useApiCalls } from "../../hooks/useApiCalls";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ColorRing } from 'react-loader-spinner'
+
+
 
 const NewHotel = () => {
   const [files, setFiles] = useState("");
-  const [info, setInfo] = useState({});
+  const [hotel, setHotel] = useState({});
   const [rooms, setRooms] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
   const { postData, err } = useApiCalls()
+  const navigate = useNavigate();
 
-  const { data, loading, error } = useFetch("/rooms");
 
   const handleChange = (e) => {
-    setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    if (e.target.id === 'city' || e.target.id === 'type') {
+      setHotel((prev) => ({ ...prev, [e.target.id]: e.target.value.toLowerCase() }));
+    } else {
+      setHotel((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    }
   };
 
-  const handleSelect = (e) => {
-    const value = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value
-    );
-    setRooms(value);
-  };
-
-  console.log(files)
-
+  const handleRoomChange = (e) => {
+    console.log(e.target.type)
+    if (e.target.type === 'number') {
+      setRooms({ ...rooms, [e.target.id]: parseInt(e.target.value) });
+      return
+    }
+    setRooms({ ...rooms, [e.target.id]: e.target.value });
+  }
   const handleClick = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
+    const roomNumbers = rooms?.roomNumbers?.split(",").map((room) => parseInt(room));
+
+    rooms.roomNumbers = roomNumbers
     try {
       const list = await Promise.all(
         Object.values(files).map(async (file) => {
@@ -49,14 +60,37 @@ const NewHotel = () => {
       );
 
       const newhotel = {
-        ...info,
-        rooms,
-        photos: list,
-      };
+        hotelDetails: {
+          ...hotel,
+          photos: list,
+        },
+        roomDetails: {
+          ...rooms,
 
-     postData("/hotels", newhotel);
+        },
+      };
+      newhotel.hotelDetails.cheapestPrice = parseInt(newhotel.hotelDetails.cheapestPrice)
+      await postData("/hotels", newhotel);
+      setIsLoading(false)
+      setTimeout(() => {
+        navigate("/hotels");
+      }, 1000)
     } catch (err) { console.log(err) }
   };
+
+
+  if (isLoading) {
+    return (
+      <div className="loader">
+        <ColorRing
+          color="#00BFFF"
+          height={300}
+          width={300}
+          timeout={3000}
+        />
+      </div>
+    );
+  }
   return (
     <div className="new">
       <Sidebar />
@@ -77,7 +111,7 @@ const NewHotel = () => {
             />
           </div>
           <div className="right">
-            <form>
+            <form onSubmit={handleClick}>
               <div className="formInput">
                 <label htmlFor="file">
                   Image: <DriveFolderUploadOutlinedIcon className="icon" />
@@ -88,6 +122,7 @@ const NewHotel = () => {
                   multiple
                   onChange={(e) => setFiles(e.target.files)}
                   style={{ display: "none" }}
+                  required
                 />
               </div>
 
@@ -99,30 +134,42 @@ const NewHotel = () => {
                     onChange={handleChange}
                     type={input.type}
                     placeholder={input.placeholder}
+                    required
+                  />
+                </div>
+              ))}
+              {/* <div className="formInput"> */}
+              <label>
+                Featured
+                <input type="checkbox"
+                  defaultChecked={false}
+                  onChange={() => setHotel({ ...hotel, featured: !hotel.featured })}
+                />
+              </label>
+              {/* </div> */}
+
+              {roomInputs.map((input) => (
+                <div className="formInput" key={input.id}>
+                  <label>{input.label}</label>
+                  <input
+                    id={input.id}
+                    onChange={handleRoomChange}
+                    type={input.type}
+                    placeholder={input.placeholder}
+                    required
                   />
                 </div>
               ))}
               <div className="formInput">
-                <label>Featured</label>
-                <select id="featured" onChange={handleChange}>
-                  <option value={false}>No</option>
-                  <option value={true}>Yes</option>
-                </select>
-              </div>
-              <div className="selectRooms">
                 <label>Rooms</label>
-                <select id="rooms" multiple onChange={handleSelect}>
-                  {loading
-                    ? "loading"
-                    : data &&
-                    data.map((room) => (
-                      <option key={room._id} value={room._id}>
-                        {room.title}
-                      </option>
-                    ))}
-                </select>
+                <textarea
+                  id="roomNumbers"
+                  onChange={handleRoomChange}
+                  placeholder="give comma between room numbers."
+                />
               </div>
-              <button onClick={handleClick}>Send</button>
+
+              <button type="submit" >Send</button>
             </form>
           </div>
         </div>

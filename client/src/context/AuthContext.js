@@ -23,12 +23,17 @@ const AuthReducer = (state, action) => {
         error: null,
       };
     case "LOGIN_FAILURE":
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+
       return {
         user: null,
         loading: false,
         error: action.payload,
       };
     case "LOGOUT":
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
       return {
         user: null,
         loading: false,

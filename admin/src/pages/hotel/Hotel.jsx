@@ -1,11 +1,12 @@
 import React from 'react'
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
-import {useFetch }from "../../hooks/useFetch";
+import { useFetch } from "../../hooks/useFetch";
 import Box from '@mui/material/Box';
 import Room from '../../components/room/Room';
 import Grid from '@mui/material/Grid';
 import { useParams } from 'react-router-dom';
+import { ProgressBar } from 'react-loader-spinner'
 import "./hotel.scss";
 
 
@@ -14,10 +15,20 @@ import "./hotel.scss";
 function Hotel() {
     const { productId } = useParams()
     const { data, loading, error } = useFetch(`hotels/find/${productId}`);
+    console.log(data.rooms)
     if (loading) {
-        return <div>Loading...</div>
+        return (
+            <div className="loader">
+                <ProgressBar
+                    color="#00BFFF"
+                    height={200}
+                    width={200}
+                    timeout={3000}
+                />
+            </div>
+        );
     }
-    console.log(data.name)
+    console.log(data)
     return (
         <div className="single">
             <Sidebar />
@@ -27,9 +38,9 @@ function Hotel() {
                     <div className="top">
                         <Box sx={{ flexGrow: 1 }}>
                             <Grid container spacing={1}>
-                                {data?.photos?.map((photo) => {
+                                {data?.photos?.map((photo, index) => {
                                     return (
-                                        <Grid item xs={12 / (data?.photos?.length + 1)}>
+                                        <Grid key={index} item xs={20 / (data?.photos?.length + 1)}>
                                             <div className='images'>
                                                 <img src={photo} />
                                             </div>
@@ -49,7 +60,7 @@ function Hotel() {
                         <p>Price -{data.cheapestPrice} $</p>
                     </div>
                     <div className="room">
-                        <Room hotelId={productId} />
+                        <Room data={data.rooms} />
                     </div>
                 </div>
             </div>

@@ -6,10 +6,13 @@ import { useState } from "react";
 import axios from "axios";
 import { useApiCalls } from "../../hooks/useApiCalls";
 import { useNavigate } from "react-router-dom";
+import { ColorRing } from 'react-loader-spinner'
+
 const NewUser = ({ inputs, title }) => {
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
   const { postData, err } = useApiCalls()
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -18,6 +21,7 @@ const NewUser = ({ inputs, title }) => {
   console.log(info)
   const handleClick = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
     const data = new FormData();
     data.append("file", file);
     data.append("upload_preset", "upload");
@@ -35,11 +39,26 @@ const NewUser = ({ inputs, title }) => {
       };
 
       postData("/auth/register", newUser);
-      navigate("/users")
+      setIsLoading(false)
+      setTimeout(() => {
+        navigate("/users")
+      }, 1000);
     } catch (err) {
       console.log(err);
     }
   };
+  if (isLoading) {
+    return (
+      <div className="loader">
+        <ColorRing
+          color="#00BFFF"
+          height={300}
+          width={300}
+          timeout={3000}
+        />
+      </div>
+    );
+  }
 
   console.log(info);
   return (

@@ -6,12 +6,22 @@ import StoreIcon from "@mui/icons-material/Store";
 
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DarkModeContext } from "../../context/darkModeContext";
+import { AuthContext } from "../../context/AuthContext";
 import { useContext } from "react";
 
 const Sidebar = () => {
   const { dispatch } = useContext(DarkModeContext);
+  const { dispatch: authDispatch, user } = useContext(AuthContext);
+  const navigate = useNavigate()
+  const handleLogout = (e) => {
+    e.preventDefault();
+    console.log("loging out")
+    authDispatch({ type: "LOGOUT" });
+    navigate("/login")
+  }
+  // console.log(user)
   return (
     <div className="sidebar">
       <div className="top">
@@ -48,12 +58,15 @@ const Sidebar = () => {
           </Link>
           <p className="title">USER</p>
           <li>
-            <AccountCircleOutlinedIcon className="icon" />
-            <span>Profile</span>
+            <Link to={`/users/${user._id}`} style={{ textDecoration: "none" }}>
+              <AccountCircleOutlinedIcon className="icon" />
+              <span>Profile</span>
+            </Link>
           </li>
+          <br />
           <li>
             <ExitToAppIcon className="icon" />
-            <span>Logout</span>
+            <span onClick={handleLogout}>Logout</span>
           </li>
         </ul>
       </div>

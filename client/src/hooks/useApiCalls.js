@@ -4,30 +4,32 @@ import API from "../util/API";
 
 export const useApiCalls = () => {
     const [err, setErr] = useState(false);
+
     const deleteData = async (url) => {
         try {
-            await API.delete(url)
+            API.delete(url)
         } catch (error) {
             setErr(err)
         }
     }
-    const postData = async (url, info) => {
-
+    const postData = (url, info) => {
+        console.log(url, info)
         try {
-            const response = await API.post(url, info)
-
+            const response = API.post(url, info)
             return response
         } catch (error) {
             setErr(err)
         }
     }
-    const updateData = async (url, info) => {
+    const updateData = (url, info) => {
         try {
-            await API.put(url, info)
+            const response = API.put(url, info)
+            return response
         } catch (error) {
             setErr(err)
+
         }
     }
 
-    return { deleteData, postData, updateData, err, }
+    return { deleteData, postData, updateData, err }
 }

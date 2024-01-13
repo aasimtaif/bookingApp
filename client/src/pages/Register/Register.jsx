@@ -1,15 +1,17 @@
-import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { DNA } from 'react-loader-spinner'
+import { useApiCalls } from "../../hooks/useApiCalls";
+
 import "./Register.css";
 
 const Register = () => {
     const [credentials, setCredentials] = useState({
-        username: undefined,
+        userName: undefined,
         password: undefined,
     });
+    const { postData, err } = useApiCalls()
 
     const { loading, error, dispatch } = useContext(AuthContext);
 
@@ -23,7 +25,7 @@ const Register = () => {
         e.preventDefault();
         dispatch({ type: "LOGIN_START" });
         try {
-            const res = await axios.post("http://localhost:8800/api/auth/register", credentials);
+            const res = await postData("/auth/register", credentials);
             dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
             navigate(-1)
         } catch (err) {
@@ -47,8 +49,8 @@ const Register = () => {
                 <div className="lContainer">
                     <input
                         type="text"
-                        placeholder="username"
-                        id="username"
+                        placeholder="userName"
+                        id="userName"
                         onChange={handleChange}
                         className="lInput"
                     />
@@ -77,7 +79,7 @@ const Register = () => {
                     </button>
                     <span className="register-button">
                         Already have an account?
-                        <Link to='/register' style={{ textDecoration: "none" }}>
+                        <Link to='/login' style={{ textDecoration: "none" }}>
                             <b>Login now.</b>
                         </Link>
                     </span>

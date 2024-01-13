@@ -1,15 +1,15 @@
-import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { useApiCalls } from "../../hooks/useApiCalls";
 import "./login.css";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
-    username: undefined,
+    email: undefined,
     password: undefined,
   });
-
+  const { postData, err } = useApiCalls()
   const { loading, error, dispatch } = useContext(AuthContext);
 
   const navigate = useNavigate()
@@ -22,7 +22,8 @@ const Login = () => {
     e.preventDefault();
     dispatch({ type: "LOGIN_START" });
     try {
-      const res = await axios.post("http://localhost:8800/api/auth/login", credentials);
+      const res = await postData("/auth/login", credentials);
+      localStorage.setItem("token", res.data.token);
       dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
       navigate(-1)
     } catch (err) {
@@ -36,8 +37,8 @@ const Login = () => {
       <div className="lContainer">
         <input
           type="text"
-          placeholder="username"
-          id="username"
+          placeholder="email"
+          id="email"
           onChange={handleChange}
           className="lInput"
         />
@@ -52,8 +53,8 @@ const Login = () => {
           Login
         </button>
         <span className="register-button">
-          New to Lamabooking? 
-          <Link to='/register' style={{  textDecoration: "none"}}>
+          New to Lamabooking?
+          <Link to='/register' style={{ textDecoration: "none" }}>
             <b>Sign up now.</b>
           </Link>
         </span>
