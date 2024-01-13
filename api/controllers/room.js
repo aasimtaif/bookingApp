@@ -172,7 +172,17 @@ export const getRooms = async (req, res, next) => {
         }
       }
     });
-    res.status(200).json(rooms);
+    const roomDetails = rooms.map(room => {
+      return {
+        id: room.id,
+        title: room.title,
+        desc: room.desc,
+        maxPeople: room.maxPeople,
+        hotel: room.hotel.name,
+        roomNumber: room.roomNumber.map(roomNumber => roomNumber.number),
+      }
+    })
+    res.status(200).json(roomDetails);
   } catch (err) {
     next(err);
   }
