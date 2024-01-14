@@ -1,9 +1,6 @@
 import "./list.css";
 import Navbar from "../../components/navbar/Navbar";
-import Header from "../../components/header/Header";
-import { useLocation } from "react-router-dom";
 import { useState, useContext } from "react";
-import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import SearchItem from "../../components/searchItem/SearchItem";
 import useFetch from "../../hooks/useFetch";
@@ -19,8 +16,6 @@ const List = () => {
 
   const handleClick = () => {
     dispatch({ type: "NEW_SEARCH", payload: { city: destination, dates, options } });
-
-    // reFetch(`/hotels?city=${destination}`);
   };
   if (!dates) {
     return <h1>loading</h1>
@@ -30,7 +25,6 @@ const List = () => {
   return (
     <div>
       <Navbar />
-      <Header type="list" />
       <div className="listContainer">
         <div className="listWrapper">
           <div className="listSearch">

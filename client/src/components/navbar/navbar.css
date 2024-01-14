@@ -1,11 +1,11 @@
-.navbar{
+.navbar {
   height: 50px;
   background-color: #003580;
   display: flex;
   justify-content: center;
 }
 
-.navContainer{
+.navContainer {
   width: 100%;
   max-width: 1024px;
   color: white;
@@ -14,14 +14,35 @@
   justify-content: space-between;
 }
 
-.logo{
+.logo {
   font-weight: 500;
 }
 
-.navButton{
+.navButton {
   margin-left: 20px;
   border: none;
   padding: 5px 10px;
   cursor: pointer;
   color: #003580;
+}
+
+.user {
+  display: flex;
+  flex-direction: row;
+  width: min-content;
+  gap: 7px;
+}
+.user:hover {
+  cursor: pointer;
+  color: rgb(173, 174, 175);
+}
+
+.profile-icon {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: #e0e0e0d8 2px solid;
+  object-fit: cover;
+  justify-content: center;
+  align-items: center;
 }

@@ -49,6 +49,7 @@ export const getUser = async (req, res, next) => {
       },
       select: {
         password: false,
+        userName: true,
         id: true,
         email: true,
         phone: true,
@@ -96,6 +97,7 @@ export const getUser = async (req, res, next) => {
       country: user.country,
       img: user.img,
       isAdmin: user.isAdmin,
+      userName: user.userName,
       bookings: [...user.Booking]?.map(booking => {
         return {
           id: booking.id,
