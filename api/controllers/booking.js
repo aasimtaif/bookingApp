@@ -48,7 +48,7 @@ export const getBookings = async (req, res, next) => {
 
 export const getBooking = async (req, res, next) => {
     try {
-        const bookings = await prisma.booking.findMany({
+        const booking = await prisma.booking.findUnique({
             where: {
                 id: req.params.id
             },
@@ -84,28 +84,29 @@ export const getBooking = async (req, res, next) => {
                         phone: true,
                         city: true,
                         country: true,
-                        img: true
+                        img: true,
+                        isAdmin: true,
                     }
                 }
             }
         });
-        const bookingDetails = [...bookings]?.map(booking => {
-            return {
-                checkIn: booking.checkIn,
-                checkOut: booking.checkOut,
-                bookedAt: booking.createdAt,
-                total: booking.total,
-                RoomNumber: booking.RoomNumber.number,
-                room: booking.RoomNumber.room.title,
-                roomDesc: booking.RoomNumber.room.desc,
-                hotel: booking.RoomNumber.room.hotel.name,
-                type: booking.RoomNumber.room.hotel.type,
-                title: booking.RoomNumber.room.hotel.title,
-                address: booking.RoomNumber.room.hotel.address,
-                city: booking.RoomNumber.room.hotel.city,
-                user: { ...booking.user }
-            }
-        })
+        const bookingDetails = {
+
+            checkIn: booking.checkIn,
+            checkOut: booking.checkOut,
+            bookedAt: booking.createdAt,
+            total: booking.total,
+            RoomNumber: booking.RoomNumber.number,
+            room: booking.RoomNumber.room.title,
+            roomDesc: booking.RoomNumber.room.desc,
+            hotel: booking.RoomNumber.room.hotel.name,
+            type: booking.RoomNumber.room.hotel.type,
+            title: booking.RoomNumber.room.hotel.title,
+            address: booking.RoomNumber.room.hotel.address,
+            city: booking.RoomNumber.room.hotel.city,
+            user: { ...booking.user }
+        }
+
 
         res.json(bookingDetails);
     } catch (err) {

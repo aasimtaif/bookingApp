@@ -4,5 +4,5 @@ import { getBookings, getBooking } from "../controllers/booking.js";
 const router = express.Router();
 
 router.get("/", getBookings);
-router.get("/:id", getBooking)
+router.get("/find/:id", getBooking)
 export default router
