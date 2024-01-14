@@ -14,6 +14,7 @@ import NewHotel from "./pages/newHotel/NewHotel";
 import NewRoom from "./pages/newRoom/NewRoom";
 import Hotel from "./pages/hotel/Hotel";
 import RoomPage from "./pages/room/RoomPage";
+import Booking from "./pages/Booking/Booking";
 function App() {
   const { darkMode } = useContext(DarkModeContext);
 
@@ -126,6 +127,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <List columns={bookingsColumns} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path=":productId"
+              element={
+                <ProtectedRoute>
+                  <Booking />
                 </ProtectedRoute>
               }
             />
