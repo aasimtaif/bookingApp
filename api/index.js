@@ -48,6 +48,9 @@ app.use((err, req, res, next) => {
     stack: err.stack,
   });
 });
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
 app.get("/", (req, res) => {
   res.send("Welcome to the backend of the hotel booking app.");
 })
