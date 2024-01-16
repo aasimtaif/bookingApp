@@ -8,6 +8,7 @@ import roomsRoute from "./routes/rooms.js";
 import bookingRouter from "./routes/booking.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import fetch from "node-fetch"
 import { prisma } from "./config/prisma.config.js";
 
 
@@ -48,6 +49,13 @@ app.use((err, req, res, next) => {
     stack: err.stack,
   });
 });
+
+setInterval(() => {
+  fetch('https://https-booking-app-server.onrender.com') // Replace with your actual Render app URL where your Express server is hosted
+    .then(() => console.log('Ping successful'))
+    .catch((err) => console.error('Ping failed:', err));
+}, 7 * 60 * 1000); // Ping the server every 5 minutes
+
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
