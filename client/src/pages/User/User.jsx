@@ -1,26 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from "../../components/navbar/Navbar";
 import useFetch from '../../hooks/useFetch';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
+import Modal from '../../components/UpdateModal/Model';
 import './user.css'
 function User() {
     const { id } = useParams();
-    const { data, loading, error } = useFetch(`users/find/${id}`)
+    const { data: { bookings, ...user }, loading, error } = useFetch(`users/find/${id}`)
+    const [showModal, setShowModal] = useState(false);
     return (
         <div>
             <Navbar />
-            <div className="container">
+            <div className="container" style={showModal ? { opacity: 0.1 } : { opacity: 1 }}>
                 <div className="userDetails">
                     <div className="left">
-                        <img src={data.img} alt='profile' />
+                        <img src={user.img} alt='profile' />
                     </div>
                     <div className="right">
-                        <p>User Name:<span>{data.userName}</span></p>
-                        <p>Phone:<span>{data.phone}</span></p>
-                        <p>Email:<span>{data.email}</span></p>
-                        <p>City:<span>{data.city}</span></p>
-                        <p>Country:<span>{data.country}</span></p>
+                        <p>User Name:<span>{user.userName}</span></p>
+                        <p>Phone:<span>{user.phone}</span></p>
+                        <p>Email:<span>{user.email}</span></p>
+                        <p>City:<span>{user.city}</span></p>
+                        <p>Country:<span>{user.country}</span></p>
+                        <button className="update-button" onClick={() => { setShowModal(!showModal) }}>Update Profile</button>
                     </div>
                 </div>
                 <div className="bookings">
@@ -28,7 +31,7 @@ function User() {
                         Booking History
                     </h3>
                     <div className="bookingList">
-                        {data.bookings?.map((booking) => (
+                        {bookings?.map((booking) => (
                             <div className="booking" key={booking.id}>
                                 <h4>{booking.hotel}</h4>
                                 <p>
@@ -42,7 +45,6 @@ function User() {
                                     <span>
                                         {moment(booking.checkOut).format('MMMM Do YYYY')}
                                     </span>
-
                                 </p>
                                 <p>
                                     Booked At
@@ -91,6 +93,15 @@ function User() {
                     </div>
                 </div>
             </div>
+
+            {showModal &&
+                <div className='modal'>
+                    <div className="modalcontainer">
+                        <Modal user={user} setShowModal={setShowModal} />
+                        {/* <button className="closeButton">X</button> */}
+                    </div>
+                </div>
+            }
         </div>
     )
 }

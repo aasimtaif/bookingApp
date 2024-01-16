@@ -49,8 +49,36 @@ span {
 
 .bookingList {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 15px;
   align-items: center;
   justify-content: center;
+}
+
+.update-button {
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.modal {
+  z-index: 1000;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: fit-content;
+  padding: 0;
+}
+.container {
+  z-index: 0;
+}
+.modalcontainer {
+  position: relative;
 }
