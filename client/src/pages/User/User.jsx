@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from "../../components/navbar/Navbar";
 import useFetch from '../../hooks/useFetch';
 import { useParams } from 'react-router-dom';
@@ -7,8 +7,11 @@ import Modal from '../../components/UpdateModal/Model';
 import './user.css'
 function User() {
     const { id } = useParams();
-    const { data: { bookings, ...user }, loading, error } = useFetch(`users/find/${id}`)
+    const { data: { bookings, ...user }, loading, error, reFetch } = useFetch(`users/find/${id}`)
     const [showModal, setShowModal] = useState(false);
+    useEffect(() => {
+        reFetch(`users/find/${id}`)
+    }, [ showModal]);
     return (
         <div>
             <Navbar />

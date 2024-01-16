@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import './model.css'
 import axios from 'axios';
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useApiCalls } from '../../hooks/useApiCalls';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 
 const inputs = [
@@ -44,6 +45,8 @@ const inputs = [
 function Model({ user, setShowModal }) {
     const [file, setFile] = useState();
     const [info, setInfo] = useState();
+    const { dispatch } = useContext(AuthContext);
+
     const [isLoading, setIsLoading] = useState(false)
     const { updateData, err } = useApiCalls()
     const handleChange = (e) => {
@@ -74,11 +77,12 @@ function Model({ user, setShowModal }) {
                 img: await UploadImage()
             };
             console.log(newUser);
-            updateData(`/users/${user.id}`, newUser);
+            const res = await updateData(`/users/${user.id}`, newUser);
+            // console.log(res.data)
+            dispatch({ type: "UPDATE_USER", payload: res.data })
             setIsLoading(false)
             setTimeout(() => {
                 setShowModal(false)
-                navigate(-1)
             }, 1000);
         } catch (err) {
             console.log(err);
