@@ -1,5 +1,9 @@
 # Hotel Booking Website & Admin Dashboard
 
+## Deployed Links
+- [https://booking-app-ninm.vercel.app](link_to_deployed_booking_website)
+- [https://booking-app-five-pi.vercel.app](link_to_deployed_admin_dashboard)
+
 ## Overview
 This project consists of a hotel booking website and an admin dashboard. The website allows users to search for hotels by location, view room details, and make reservations based on selected dates. The admin dashboard provides authentication for administrators to manage room data, hotel data, user data, and booking data.
 
@@ -18,15 +22,15 @@ This project consists of a hotel booking website and an admin dashboard. The web
 - Manage booking data: Administrators can view and handle booking details, including reservations and payment status.
 
 ## Technologies
-- Frontend: HTML, CSS, JavaScript
-- Backend: Node.js, Express
+- Frontend: React (for frontend UI)
+- Backend: Node.js, Express ,Prisma
 - Database: MongoDB
 - Authentication: JSON Web Tokens (JWT)
-- Other: React (for frontend UI), Redux (state management)
+- Other: Materail UI,SCSS
 
 ## Installation and Setup
 1. Clone the repository from [repository link].
-2. Install dependencies using `npm install` in the project root and client directories.
+2. Install dependencies using `npm install` in the project api , admin and client directories.
 3. Set up the database and configure the connection in the backend.
 4. Start the server and client using `npm start` in the respective directories.
 
