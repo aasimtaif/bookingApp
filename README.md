@@ -1,8 +1,8 @@
 # Hotel Booking Website & Admin Dashboard
 
 ## Deployed Links
-- [https://booking-app-ninm.vercel.app](link_to_deployed_booking_website)
-- [https://booking-app-five-pi.vercel.app](link_to_deployed_admin_dashboard)
+- [Booking Website Deployment](https://booking-app-ninm.vercel.app)
+- [Admin Dashboard Deployment](https://booking-app-five-pi.vercel.app)
 
 ## Overview
 This project consists of a hotel booking website and an admin dashboard. The website allows users to search for hotels by location, view room details, and make reservations based on selected dates. The admin dashboard provides authentication for administrators to manage room data, hotel data, user data, and booking data.
