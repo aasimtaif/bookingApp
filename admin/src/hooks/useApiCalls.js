@@ -18,7 +18,7 @@ export const useApiCalls = () => {
 
             return response
         } catch (error) {
-            setErr(err)
+            setErr(error.response.data.message)
         }
     }
     const updateData = async (url, info) => {

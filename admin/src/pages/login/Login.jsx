@@ -7,8 +7,8 @@ import "./login.scss";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
-    email: undefined,
-    password: undefined,
+    email: 'admin@gmail.com',
+    password: '123456',
   });
   const { postData, err } = useApiCalls()
 
@@ -19,7 +19,7 @@ const Login = () => {
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
-
+console.log(err)
   const handleClick = async (e) => {
     e.preventDefault();
     dispatch({ type: "LOGIN_START" });
@@ -44,13 +44,17 @@ const Login = () => {
 
   return (
     <div className="login">
+      
+      <h4><span>*</span>The Email and password are provider intentionally foe project examiner</h4>
       <div className="lContainer">
+
         <input
           type="text"
           placeholder="email"
           id="email"
           onChange={handleChange}
           className="lInput"
+          defaultValue={credentials.email}
         />
         <input
           type="password"
@@ -58,11 +62,12 @@ const Login = () => {
           id="password"
           onChange={handleChange}
           className="lInput"
+          defaultValue={credentials.password}
         />
         <button disabled={loading} onClick={handleClick} className="lButton">
           Login
         </button>
-        {error && <span>{error.message}</span>}
+        {err && <span>{err}</span>}
       </div>
     </div>
   );
