@@ -19,7 +19,7 @@ function Room({ data }) {
       {data?.map((info) => (
         <div className="roomdetails" key={info.id}>
           <div className="top">
-            <h2>{info.title}</h2>
+            <h2>{info.title} </h2>
             <p>{info.desc}</p>
             <p>maxPeople - {info.maxPeople}</p>
           </div>
@@ -32,9 +32,15 @@ function Room({ data }) {
                 <p>Room number {room?.number}</p>
                 {room.unAvailableDates?.length !== 0 ?
                   <div>
-                    <p>Unavailable Dates </p>
+                    <p>Un-Available At </p>
+                    &nbsp;
+                    &nbsp;
+
                     {room?.unAvailableDates?.map((date, index) => (
+                      <>
                       <p key={index}>{moment(date).format("MMM Do YY")}</p>
+                      <p>&nbsp;</p>
+                      </>
                     ))}
                   </div> : "available"
                 }

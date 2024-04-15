@@ -40,6 +40,7 @@ export const updateHotel = async (req, res, next) => {
 
     res.status(200).json(hotel);
   } catch (err) {
+    console.log(err)
     next(err);
   }
 };

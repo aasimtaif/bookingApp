@@ -42,6 +42,7 @@ export const getBookings = async (req, res, next) => {
         })
         res.json(bookingDetails);
     } catch (err) {
+        console.log(err)
         next(err);
     }
 }

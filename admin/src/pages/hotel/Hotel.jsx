@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import { useFetch } from "../../hooks/useFetch";
@@ -8,13 +8,39 @@ import Grid from '@mui/material/Grid';
 import { useParams } from 'react-router-dom';
 import { ProgressBar } from 'react-loader-spinner'
 import "./hotel.scss";
-
+import { hotelInputs } from '../../formSource';
+import { useApiCalls } from '../../hooks/useApiCalls';
 
 
 
 function Hotel() {
     const { productId } = useParams()
-    const { data, loading, error } = useFetch(`hotels/find/${productId}`);
+    const [info, setInfo] = useState();
+    const { data, loading, error, reFetch } = useFetch(`hotels/find/${productId}`);
+    const [openEdit, setOpenEdit] = useState(false);
+    const { updateData } = useApiCalls()
+    const handleChange = (e) => {
+        if (e.target.type === 'number') {
+            setInfo({ ...info, [e.target.id]: parseInt(e.target.value) });
+            return
+        } else {
+
+            setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+        }
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        try {
+            updateData(`/hotels/${productId}`, info)
+            setTimeout(() => {
+                setOpenEdit(false)
+                reFetch()
+            }, 1000)
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
     console.log(data.rooms)
     if (loading) {
         return (
@@ -28,7 +54,7 @@ function Hotel() {
             </div>
         );
     }
-    console.log(data)
+    console.log(typeof (info?.cheapestPrice))
     return (
         <div className="single">
             <Sidebar />
@@ -50,21 +76,45 @@ function Hotel() {
                             </Grid>
                         </Box>
                     </div>
-                    <div className='details'>
-                        <h1>{data.name}<span>{data.type}</span></h1>
-                        <h3>{data.title}</h3>
-                        <p>{data.desc}</p>
-                        <p>City - {data.city}</p>
-                        <p>{data.address}</p>
-                        <p>{data.distance}</p>
-                        <p>Price -{data.cheapestPrice} $</p>
-                    </div>
+                    {openEdit ?
+                        <form onSubmit={handleSubmit}>
+                            <div>
+                                {hotelInputs.map((input) => (
+                                    <label>{input.label}
+                                        <input
+                                            onChange={handleChange}
+                                            type={input.type}
+                                            defaultValue={data[input.id]}
+                                            placeholder={input.placeholder}
+                                            id={input.id}
+
+                                        />
+                                    </label>
+                                ))}
+                            </div>
+                            <div className='buttons'>
+                                <button className='submit' >Submit</button>
+                                <button className='discard' onClick={() => { setOpenEdit(false) }}>Discard</button>
+                            </div>
+                        </form>
+                        :
+                        <div className='details'>
+                            <div className="editButton" onClick={() => { setOpenEdit(!openEdit) }}>Edit</div>
+                            <h1>{data.name}<span>{data.type}</span></h1>
+                            <h3>{data.title}</h3>
+                            <p>{data.desc}</p>
+                            <p>City - {data.city}</p>
+                            <p>{data.address}</p>
+                            <p>{data.distance}</p>
+                            <p>Price -{data.cheapestPrice} $</p>
+                        </div>
+                    }
                     <div className="room">
                         <Room data={data.rooms} />
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
