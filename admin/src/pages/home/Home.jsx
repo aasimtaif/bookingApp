@@ -8,6 +8,9 @@ const Home = () => {
       <Sidebar />
       <div className="homeContainer">
         <Navbar />
+        This page is Under construction
+        <br />
+        Use Side bar to Navigate to other page Like Users, Hotels, Rooms, Bookings
       </div>
     </div>
   );

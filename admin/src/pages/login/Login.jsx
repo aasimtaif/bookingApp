@@ -45,7 +45,10 @@ console.log(err)
   return (
     <div className="login">
       
-      <h4><span>*</span>The Email and password are provider intentionally foe project examiner</h4>
+      <h4><span>*</span>The Email and password are provider intentionally for project examination
+      <br/>
+      <span>*</span>
+      Please Dont delete All  records </h4>
       <div className="lContainer">
 
         <input
