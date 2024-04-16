@@ -10,6 +10,7 @@ import { ProgressBar } from 'react-loader-spinner'
 import "./hotel.scss";
 import { hotelInputs } from '../../formSource';
 import { useApiCalls } from '../../hooks/useApiCalls';
+import UpdateRoom from '../../components/UpdateRoom/UpdateRoom';
 
 
 
@@ -17,7 +18,7 @@ function Hotel() {
     const { productId } = useParams()
     const [info, setInfo] = useState();
     const { data, loading, error, reFetch } = useFetch(`hotels/find/${productId}`);
-    const [openEdit, setOpenEdit] = useState(false);
+    const [openEdit, setOpenEdit] = useState({ hotel: false, room: false });
     const { updateData } = useApiCalls()
     const handleChange = (e) => {
         if (e.target.type === 'number') {
@@ -33,7 +34,7 @@ function Hotel() {
         try {
             updateData(`/hotels/${productId}`, info)
             setTimeout(() => {
-                setOpenEdit(false)
+                setOpenEdit({ ...openEdit, hotel: false })
                 reFetch()
             }, 1000)
         } catch (err) {
@@ -76,7 +77,7 @@ function Hotel() {
                             </Grid>
                         </Box>
                     </div>
-                    {openEdit ?
+                    {openEdit.hotel ?
                         <form onSubmit={handleSubmit}>
                             <div>
                                 {hotelInputs.map((input) => (
@@ -94,12 +95,12 @@ function Hotel() {
                             </div>
                             <div className='buttons'>
                                 <button className='submit' >Submit</button>
-                                <button className='discard' onClick={() => { setOpenEdit(false) }}>Discard</button>
+                                <button className='discard' onClick={() => { setOpenEdit({ ...openEdit, hotel: false }) }}>Discard</button>
                             </div>
                         </form>
                         :
                         <div className='details'>
-                            <div className="editButton" onClick={() => { setOpenEdit(!openEdit) }}>Edit</div>
+                            <div className="editButton" onClick={() => { setOpenEdit({ ...openEdit, hotel: true }) }}>Edit</div>
                             <h1>{data.name}<span>{data.type}</span></h1>
                             <h3>{data.title}</h3>
                             <p>{data.desc}</p>
@@ -110,7 +111,14 @@ function Hotel() {
                         </div>
                     }
                     <div className="room">
-                        <Room data={data.rooms} />
+                        {openEdit.room ? <UpdateRoom /> :
+                            <>
+                                <div className="editButton" onClick={() => { setOpenEdit({ ...openEdit, hotel: true }) }}>Edit</div>
+                                <Room data={data.rooms} />
+                            </>
+                        }
+
+
                     </div>
                 </div>
             </div>

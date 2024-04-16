@@ -150,10 +150,23 @@ $media-mobile-sm: "only screen and (max-width : 480px)";
         width: 70%;
     }
 
-    // .room {
-    //     padding:2rem;
-    //     margin: 2rem;
-    //     border: 0.1rem solid grey;
-    //     border-radius: 10px;
-    // }
+    .room {
+        border: thin solid rgb(228, 227, 227);
+        border-radius: 10px;
+        margin: 1rem;
+        position: relative;
+
+        .editButton {
+            position: absolute;
+            top: 2;
+            right: 0;
+            padding: 5px;
+            font-size: 12px;
+            color: #7451f8;
+            background-color: #7551f818;
+            cursor: pointer;
+            border: none;
+            border-radius: 10%;
+        }
+    }
 }
