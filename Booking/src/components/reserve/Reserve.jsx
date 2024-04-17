@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useApiCalls } from "../../hooks/useApiCalls";
 const Reserve = ({ setOpen, data, total }) => {
   const [selectedRooms, setSelectedRooms] = useState([]);
-  const { dates } = useContext(SearchContext);
+  const { dates, dispatch } = useContext(SearchContext);
   const { user } = useContext(AuthContext);
   const { updateData } = useApiCalls()
 
@@ -31,7 +31,7 @@ const Reserve = ({ setOpen, data, total }) => {
     return dates;
   };
 
-  const alldates = getDatesInRange(dates[0].startDate, dates[0].endDate);
+  const alldates = getDatesInRange(dates.startDate, dates.endDate);
 
   const isAvailable = (roomNumber) => {
     const isFound = roomNumber.unAvailableDates?.some((date) =>
@@ -57,17 +57,19 @@ const Reserve = ({ setOpen, data, total }) => {
     // console.log(selectedRooms.length)
     console.log(new Date(alldates[0]).toISOString())
     try {
-      const res = updateData(`/rooms/availability`, {
+      const res = await updateData(`/rooms/availability`, {
         roomIds: selectedRooms,
         dates: alldates.map((date) => new Date(date).toISOString()),
         userId: user.id,
         total: total * selectedRooms.length
       });
-      if (res) {
+      setTimeout(() => {
+        dispatch({ type: "RESET_SEARCH" })
         setOpen(false);
         navigate("/");
+      }, 1000)
 
-      }
+
     } catch (err) {
       console.log(err)
     }

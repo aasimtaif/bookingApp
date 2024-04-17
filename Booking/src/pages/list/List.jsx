@@ -8,20 +8,23 @@ import { SearchContext } from "../../context/SearchContext";
 const List = () => {
   const { city, dates: bookingDates, dispatch, options } = useContext(SearchContext);
   const [destination, setDestination] = useState(city);
-  const [dates, setDates] = useState(bookingDates);
+  const [dates, setDates] = useState([{
+    startDate: new Date(bookingDates.startDate),
+    endDate: new Date(bookingDates.endDate),
+    key: 'selection'
+  }]);
   const [openDate, setOpenDate] = useState(false);
   const { data, loading, error } = useFetch(
     `/hotels?city=${city}`
   );
 
   const handleClick = () => {
-    dispatch({ type: "NEW_SEARCH", payload: { city: destination, dates, options } });
+    dispatch({ type: "NEW_SEARCH", payload: { city: destination, dates: dates[0], options } });
   };
   if (!dates) {
     return <h1>loading</h1>
   }
-
-
+  console.log(dates)
   return (
     <div>
       <Navbar />

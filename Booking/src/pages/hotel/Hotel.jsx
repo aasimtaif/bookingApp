@@ -8,25 +8,32 @@ import {
   faCircleXmark,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
+import { addDays } from 'date-fns';
 import { useContext, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SearchContext } from "../../context/SearchContext";
 import { AuthContext } from "../../context/AuthContext";
 import Reserve from "../../components/reserve/Reserve";
-
+import { DateRange } from "react-date-range";
+import { endOfDay } from "date-fns";
 const Hotel = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[2];
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-
+  const [selectedDates, setDates] = useState([{
+    startDate: new Date(),
+    endDate: addDays(new Date(), 1),
+    key: 'selection'
+  }])
+  const [openDate, setOpenDate] = useState(false);
   const { data, loading, error } = useFetch(`/hotels/find/${id}`);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const { dates, options } = useContext(SearchContext);
+  const { dates, options, dispatch } = useContext(SearchContext);
   const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
   function dayDifference(date1, date2) {
     const timeDiff = Math.abs(date2?.getTime() - date1?.getTime());
@@ -34,7 +41,9 @@ const Hotel = () => {
     return diffDays;
   }
 
-  const days = dayDifference(new Date(dates[0].endDate), new Date(dates[0].startDate));
+  console.log(openDate)
+
+  const days = dates.startDate ? dayDifference(new Date(dates?.endDate), new Date(dates?.startDate)) : 0;
   const handleOpen = (i) => {
     setSlideNumber(i);
     setOpen(true);
@@ -59,6 +68,12 @@ const Hotel = () => {
       navigate("/login");
     }
   };
+
+  const handleDateSelect = () => {
+    dispatch({ type: "SET_DATES", payload: { dates: selectedDates[0] } })
+    setOpenDate(false)
+  }
+  console.log(dates)
   return (
     <div>
       <Navbar />
@@ -94,17 +109,34 @@ const Hotel = () => {
             </div>
           )}
           <div className="hotelWrapper">
-            <button className="bookNow">Reserve or Book Now!</button>
+            <div className="reserveDates">
+              {dates.startDate && dates.endDate ?
+                <button className="bookNow" onClick={handleClick}>Reserve or Book Now!</button>
+                :
+                <>
+                  {openDate ? <>
+                    <DateRange
+                      onChange={(item) => setDates([item.selection])}
+                      minDate={new Date()}
+                      ranges={selectedDates}
+                    />
+                    <button className="bookNow" onClick={() => { handleDateSelect() }}>Set Dates</button>
+                  </> :
+                    <button className="bookNow" onClick={() => { setOpenDate(!openDate) }}>Select Dates</button>}
+
+                </>
+              }
+            </div>
             <h1 className="hotelTitle">{data.name}</h1>
             <div className="hotelAddress">
               <FontAwesomeIcon icon={faLocationDot} />
               <span>{data.address}</span>
             </div>
             <span className="hotelDistance">
-              Excellent location – {data.distance}m from center
+              Excellent location – {data.city}
             </span>
             <span className="hotelPriceHighlight">
-              Book a stay over ${data.cheapestPrice} at this property and get a
+              Book a stay over ${data.cheapestPrice} / Night at this property and get a
               free airport taxi
             </span>
             <div className="hotelImages">
@@ -119,28 +151,29 @@ const Hotel = () => {
                 </div>
               ))}
             </div>
-            <div className="hotelDetails">
-              <div className="hotelDetailsTexts">
-                <h1 className="hotelTitle">{data.title}</h1>
-                <p className="hotelDesc">{data.desc}</p>
-              </div>
-              <div className="hotelDetailsPrice">
-                <h1>Perfect for a {days}-night stay!</h1>
-                <span>
-                  Located in the real heart of Krakow, this property has an
-                  excellent location score of 9.8!
-                </span>
-                <h2>
-                  <b>${days * data.cheapestPrice * options.room}</b> ({days}{" "}
-                  nights)
-                </h2>
-                <button onClick={handleClick}>Reserve or Book Now!</button>
-              </div>
-            </div>
+            {dates.startDate && dates.endDate &&
+              <div className="hotelDetails">
+                <div className="hotelDetailsTexts">
+                  <h1 className="hotelTitle">{data.title}</h1>
+                  <p className="hotelDesc">{data.desc}</p>
+                </div>
+                <div className="hotelDetailsPrice">
+                  <h1>Perfect for a {days}-night stay!</h1>
+                  <span>
+                    Located in the real heart of Krakow, this property has an
+                    excellent location score of 9.8!
+                  </span>
+                  <h2>
+                    <b>${days * data.cheapestPrice * options.room}</b> ({days}{" "}
+                    nights)
+                  </h2>
+                  <button onClick={handleClick}>Reserve or Book Now!</button>
+                </div>
+              </div>}
           </div>
         </div>
       )}
-      {openModal && <Reserve setOpen={setOpenModal}  data={data.rooms} total={days * data.cheapestPrice} />}
+      {openModal && <Reserve setOpen={setOpenModal} data={data.rooms} total={days * data.cheapestPrice} />}
     </div>
   );
 };

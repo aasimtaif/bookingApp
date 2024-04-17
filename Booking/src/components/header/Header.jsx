@@ -20,7 +20,7 @@ const Header = ({ type }) => {
     {
       startDate: new Date(Date.now()),
       endDate: new Date(Date.now()),
-      key: "selection",
+      key: 'selection'
     },
   ]);
   const [openOptions, setOpenOptions] = useState(false);
@@ -44,7 +44,7 @@ const Header = ({ type }) => {
   };
   const { dispatch } = useContext(SearchContext);
   const handleSearch = () => {
-    dispatch({ type: "NEW_SEARCH", payload: { city: destination, dates, options } });
+    dispatch({ type: "NEW_SEARCH", payload: { city: destination, dates: dates[0], options } });
     navigate("/hotels");
   };
   return (
