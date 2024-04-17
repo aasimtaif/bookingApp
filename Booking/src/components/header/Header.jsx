@@ -45,7 +45,12 @@ const Header = ({ type }) => {
   const { dispatch } = useContext(SearchContext);
   const handleSearch = () => {
     dispatch({ type: "NEW_SEARCH", payload: { city: destination, dates: dates[0], options } });
-    navigate("/hotels");
+    navigate("/hotels", {
+      state: {
+        conditionfield: "city",
+        fieldValue: destination,
+      },
+    });
   };
   return (
     <div className="header">

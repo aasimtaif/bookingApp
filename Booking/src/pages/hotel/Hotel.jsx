@@ -109,24 +109,28 @@ const Hotel = () => {
             </div>
           )}
           <div className="hotelWrapper">
-            <div className="reserveDates">
-              {dates.startDate && dates.endDate ?
-                <button className="bookNow" onClick={handleClick}>Reserve or Book Now!</button>
-                :
-                <>
-                  {openDate ? <>
-                    <DateRange
-                      onChange={(item) => setDates([item.selection])}
-                      minDate={new Date()}
-                      ranges={selectedDates}
-                    />
-                    <button className="bookNow" onClick={() => { handleDateSelect() }}>Set Dates</button>
-                  </> :
-                    <button className="bookNow" onClick={() => { setOpenDate(!openDate) }}>Select Dates</button>}
 
-                </>
-              }
-            </div>
+            {dates.startDate && dates.endDate &&!openDate ?
+              <div className="reserveDates">
+                <button className="bookNow" onClick={handleClick}> Book Now!</button>
+                <button className="changeDates" onClick={() => { setOpenDate(true) }}> Change Dates</button>
+
+              </div>
+              :
+              <>
+                {openDate ? <>
+                  <DateRange
+                    onChange={(item) => setDates([item.selection])}
+                    minDate={new Date()}
+                    ranges={selectedDates}
+                  />
+                  <button className="changeDates" onClick={() => { handleDateSelect() }}>Set Dates</button>
+                </> :
+                  <button className="changeDates" onClick={() => { setOpenDate(!openDate) }}>Select Dates</button>}
+
+              </>
+            }
+
             <h1 className="hotelTitle">{data.name}</h1>
             <div className="hotelAddress">
               <FontAwesomeIcon icon={faLocationDot} />

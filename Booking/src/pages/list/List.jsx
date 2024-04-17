@@ -1,13 +1,18 @@
 import "./list.css";
 import Navbar from "../../components/navbar/Navbar";
 import { useState, useContext } from "react";
+import { useLocation } from "react-router-dom";
 import { DateRange } from "react-date-range";
 import SearchItem from "../../components/searchItem/SearchItem";
 import useFetch from "../../hooks/useFetch";
 import { SearchContext } from "../../context/SearchContext";
+import { fi } from "date-fns/locale";
 const List = () => {
   const { city, dates: bookingDates, dispatch, options } = useContext(SearchContext);
   const [destination, setDestination] = useState(city);
+  const location = useLocation();
+
+  console.log(location.state)
   const [dates, setDates] = useState([{
     startDate: new Date(bookingDates.startDate),
     endDate: new Date(bookingDates.endDate),
@@ -15,7 +20,7 @@ const List = () => {
   }]);
   const [openDate, setOpenDate] = useState(false);
   const { data, loading, error } = useFetch(
-    `/hotels?city=${city}`
+    `/hotels?${location.state?.conditionfield}=${location.state?.fieldValue}`
   );
 
   const handleClick = () => {
@@ -56,6 +61,7 @@ const List = () => {
               "loading"
             ) : (
               <>
+                {data.length === 0 && <h3>No Result found</h3>}
                 {data.map((item) => (
                   <SearchItem item={item} key={item.id} />
                 ))}
