@@ -49,11 +49,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-setInterval(() => {
-  fetch('https://https-booking-app-server.onrender.com') // Replace with your actual Render app URL where your Express server is hosted
-    .then(() => console.log('Ping successful'))
-    .catch((err) => console.error('Ping failed:', err));
-}, 13 * 60 * 1000); 
+
 
 app.get('/health', (req, res) => {
   res.status(200).send('OK');

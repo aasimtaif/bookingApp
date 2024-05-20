@@ -6,7 +6,7 @@ import NewUser from "./pages/newuser/NewUser";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { productInputs, userInputs } from "./formSource";
 import "./style/dark.scss";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/AuthContext";
 import { hotelColumns, roomColumns, userColumns, bookingsColumns } from "./datatablesource";
@@ -15,18 +15,26 @@ import NewRoom from "./pages/newRoom/NewRoom";
 import Hotel from "./pages/hotel/Hotel";
 import RoomPage from "./pages/room/RoomPage";
 import Booking from "./pages/Booking/Booking";
+import axios from "axios";
+import Timer from "./components/Timer/Timer";
 function App() {
   const { darkMode } = useContext(DarkModeContext);
-
+  const [isLoading, setIsLoading] = useState(true)
   const ProtectedRoute = ({ children }) => {
     const { user } = useContext(AuthContext);
-
     if (!user) {
       return <Navigate to="/login" />;
     }
-
     return children;
   };
+  useEffect(() => {
+    axios.get("https://https-booking-app-server.onrender.com/health").then((res) => {
+      setIsLoading(false)
+    }).catch((err) => {
+      setIsLoading(false)
+    })
+  }, []);
+  if (isLoading) return (<Timer />)
 
   return (
     <div className={darkMode ? "app dark" : "app"}>

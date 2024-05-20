@@ -9,7 +9,19 @@ import List from "./pages/list/List";
 import Login from "./pages/login/Login";
 import Register from "./pages/Register/Register";
 import User from "./pages/User/User";
+import { useEffect, useState } from "react";
+import Timer from "./components/Timer/Timer";
+import axios from "axios";
 function App() {
+  const [isLoading , setIsLoading] = useState(true)
+  useEffect(() => {
+    axios.get("https://https-booking-app-server.onrender.com/health").then((res) => {
+      setIsLoading(false)
+    }).catch((err) => {
+      setIsLoading(false)
+    })
+  }, []);
+  if(isLoading) return (<Timer/>)
   return (
     <BrowserRouter>
       <Routes>
