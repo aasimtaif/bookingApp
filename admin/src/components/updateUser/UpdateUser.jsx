@@ -48,6 +48,7 @@ function UpdateUser({ data }) {
             console.log(err);
         }
     };
+    console.log(info)
     return (
         <div className="bottom">
             <div className="left">

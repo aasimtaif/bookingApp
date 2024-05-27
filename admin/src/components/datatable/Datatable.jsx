@@ -19,6 +19,10 @@ const Datatable = ({ columns }) => {
 
   const handleDelete = async (id) => {
     try {
+      if(id==='66544734768d7857744928b4'){
+        alert('You cannot delete Admin ')
+        return
+      }
       await deleteData(`/${path}/${id}`)
       reFetch(`/${path}`)
     } catch (err) {
